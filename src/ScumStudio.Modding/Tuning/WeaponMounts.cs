@@ -29,19 +29,26 @@ public static class WeaponMounts
     /// <summary>True for an edit this class writes.</summary>
     public static bool IsEdit(string path) => path.StartsWith(Property + "[", StringComparison.Ordinal) && path.Contains(Marker, StringComparison.Ordinal);
 
-    /// <summary>Mount type class path → the attachments/magazines (package paths) that carry it.</summary>
-    public static IReadOnlyDictionary<string, IReadOnlyList<string>> Index(AssetCatalog catalog)
+    /// <summary>
+    /// Mount type class path → the attachments/magazines (package paths) that carry it. <paramref name="clones"/> are the
+    /// project's own copies (a magazine or attachment cloned from a stock one keeps its mount type, so it fits the same
+    /// sockets): they are not in the game files, so <paramref name="read"/> opens them, and they are listed first.
+    /// </summary>
+    public static IReadOnlyDictionary<string, IReadOnlyList<string>> Index(AssetCatalog catalog, IEnumerable<string>? clones = null, Func<string, CookedPackage?>? read = null)
     {
         ArgumentNullException.ThrowIfNull(catalog);
         var index = new Dictionary<string, List<string>>(StringComparer.OrdinalIgnoreCase);
-        var packages = catalog.PackageFiles.Select(f => AssetPaths.ToPackagePath(f, catalog.ProjectName))
-            .Where(p => p.StartsWith(ItemFolder, StringComparison.OrdinalIgnoreCase) && !p.EndsWith("_ES", StringComparison.OrdinalIgnoreCase))
+        var own = (clones ?? []).Where(p => read is not null && p.StartsWith(ItemFolder, StringComparison.OrdinalIgnoreCase) && !p.EndsWith("_ES", StringComparison.OrdinalIgnoreCase))
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .ToList();
+        var packages = own.Concat(catalog.PackageFiles.Select(f => AssetPaths.ToPackagePath(f, catalog.ProjectName))
+            .Where(p => p.StartsWith(ItemFolder, StringComparison.OrdinalIgnoreCase) && !p.EndsWith("_ES", StringComparison.OrdinalIgnoreCase)))
             .Distinct(StringComparer.OrdinalIgnoreCase);
         foreach (var path in packages)
         {
             try
             {
-                var package = ModdableAssets.ReadPackage(catalog, path);
+                var package = own.Contains(path, StringComparer.OrdinalIgnoreCase) ? read!(path) ?? throw new FileNotFoundException(path) : ModdableAssets.ReadPackage(catalog, path);
                 if (package.Names.Contains("_attachmentSocketMountType") && Cdo(package) is >= 0 and var cdo
                     && package.ReadProperties(cdo).Find("_attachmentSocketMountType")?.Value is ObjectValue { Index: < 0 } mount
                     && ImportPath(package, mount.Index) is { } mountPath)
@@ -55,7 +62,9 @@ public static class WeaponMounts
             }
         }
 
-        return index.ToDictionary(e => e.Key, e => (IReadOnlyList<string>)e.Value.Order(StringComparer.OrdinalIgnoreCase).ToList(), StringComparer.OrdinalIgnoreCase);
+        // The project's copies first, then the game's, each sorted.
+        return index.ToDictionary(e => e.Key, e => (IReadOnlyList<string>)e.Value
+            .OrderBy(p => own.Contains(p, StringComparer.OrdinalIgnoreCase) ? 0 : 1).ThenBy(p => p, StringComparer.OrdinalIgnoreCase).ToList(), StringComparer.OrdinalIgnoreCase);
     }
 
     /// <summary>

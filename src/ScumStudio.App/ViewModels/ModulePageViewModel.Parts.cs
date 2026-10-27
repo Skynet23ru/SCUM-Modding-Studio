@@ -18,7 +18,7 @@ namespace ScumStudio.App.ViewModels;
 /// </content>
 public abstract partial class ModulePageViewModel
 {
-    private (AssetCatalog Catalog, IReadOnlyDictionary<string, IReadOnlyList<string>> Index)? _mountIndex;
+    private (AssetCatalog Catalog, string Clones, IReadOnlyDictionary<string, IReadOnlyList<string>> Index)? _mountIndex;
 
     /// <summary>The attachment package drawn highlighted in the 3D view (a part row's "show on the car"), or empty.</summary>
     [ObservableProperty]
@@ -80,9 +80,12 @@ public abstract partial class ModulePageViewModel
         var package = ReadForEditing(catalog, part.PackagePath);
         if (part.IsWeaponMounts)
         {
-            if (_mountIndex is not { } kept || !ReferenceEquals(kept.Catalog, catalog))
+            // The project's clones (a copied magazine or attachment) join the game's items; the list is read again when they change.
+            var clones = _services.Projects.Current?.State.AssetClones.SelectMany(c => c.Packages).Select(p => p.New).ToList() ?? [];
+            var signature = string.Join('|', clones);
+            if (_mountIndex is not { } kept || !ReferenceEquals(kept.Catalog, catalog) || kept.Clones != signature)
             {
-                _mountIndex = kept = (catalog, WeaponMounts.Index(catalog));
+                _mountIndex = kept = (catalog, signature, WeaponMounts.Index(catalog, clones, p => TryRead(catalog, p)));
             }
 
             return WeaponMounts.Read(package, kept.Index);

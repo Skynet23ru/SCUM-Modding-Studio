@@ -5,6 +5,9 @@ project uses [semantic versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Fixed
+- **A magazine or attachment you cloned is listed in the weapon's Attachments part.** The list of what a socket takes only knew the game's items, so a copy of a magazine never showed up next to the stock ones. The project's copies are read too and shown first (they keep the mount type of the item they were copied from, so they fit the same sockets).
+
 ## [3.7.0] - 2026-10-27
 
 ### Changed
