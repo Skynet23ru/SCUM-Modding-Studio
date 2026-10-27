@@ -54,5 +54,10 @@ jobs:
           $zip = "dist/SCUM-Modding-Studio-$v-win-x64.zip"
           # A release made by hand for this tag gets the CI-built zip; otherwise a draft is created.
           gh release view "v$v" *> $null
-          if ($LASTEXITCODE -eq 0) { gh release upload "v$v" $zip --clobber }
-          else { gh release create "v$v" $zip --draft --title "SCUM Forge $v" --notes-file CHANGELOG.md }
+          if ($LASTEXITCODE -eq 0) { gh release upload "v$v" $zip --clobber; exit $LASTEXITCODE }
+          # The whole CHANGELOG is longer than GitHub allows for release notes (125000 characters): only this version's section goes in.
+          $text = Get-Content CHANGELOG.md -Raw
+          $m = [regex]::Match($text, "(?ms)^## \[$([regex]::Escape($v))\][^\r\n]*\r?\n(.*?)(?=^## \[|\z)")
+          $notes = if ($m.Success) { $m.Groups[1].Value.Trim() } else { "See CHANGELOG.md" }
+          Set-Content -Path release-notes.md -Value $notes -Encoding utf8
+          gh release create "v$v" $zip --draft --title "SCUM Forge $v" --notes-file release-notes.md
