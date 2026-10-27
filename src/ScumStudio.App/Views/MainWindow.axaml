@@ -6,6 +6,7 @@
         xmlns:c="using:ScumStudio.App.Controls"
         xmlns:loc="using:ScumStudio.App.Localization"
         xmlns:local="using:ScumStudio.App.Views"
+        Icon="/Assets/app-icon.png"
         mc:Ignorable="d" d:DesignWidth="1440" d:DesignHeight="860"
         x:Class="ScumStudio.App.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"

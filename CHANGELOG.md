@@ -6,6 +6,8 @@ project uses [semantic versioning](https://semver.org/).
 ## [Unreleased]
 
 ### Changed
+- **README is in Russian** (`README.md`); the English text moved to `README.en.md`, each links to the other.
+- **The app has an icon** (an anvil): in the exe, the taskbar and the main window.
 - **The app is now called SCUM Forge**, a fork of SCUM Modding Studio by ALLAWI (MIT). The name changed in the window, texts of all 10 languages, README and build info; the About page names the origin; `LICENSE` keeps the original copyright. Code namespaces (`ScumStudio.*`) are unchanged so upstream changes can still be merged. The update check, the report link and the project page now point to this fork's repository.
 
 ### Added

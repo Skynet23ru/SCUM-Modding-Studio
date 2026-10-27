@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
+    <ApplicationIcon>Assets/app-icon.ico</ApplicationIcon>
     <TargetFramework>net8.0</TargetFramework>
     <RootNamespace>ScumStudio.App</RootNamespace>
     <Description>ScumStudio desktop editor (Avalonia).</Description>
