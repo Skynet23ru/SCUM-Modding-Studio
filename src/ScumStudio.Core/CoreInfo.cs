@@ -7,7 +7,7 @@ public static class CoreInfo
     public const string Name = "ScumStudio.Core";
 
     /// <summary>Product name shown in UIs, logs and the CLI.</summary>
-    public const string ProductName = "SCUM Modding Studio";
+    public const string ProductName = "SCUM Forge";
 
     /// <summary>Unreal Engine version of the SCUM cooked content this tool targets.</summary>
     public const string TargetEngineVersion = "4.27.2";

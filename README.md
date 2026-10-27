@@ -1,6 +1,10 @@
 <div align="center">
 
-# SCUM Modding Studio
+# SCUM Forge
+
+> **SCUM Forge is a fork of [SCUM Modding Studio](https://github.com/ALLAWI32/SCUM-Modding-Studio) by ALLAWI** (MIT licence).
+> All the map editor, item and export work comes from that project; this fork adds the server tools (UE4SS Lua mods, loot editor,
+> guard posts), the first-run wizard / Home page / left navigation rail and the dungeon guide. See [Credits](#credits-and-origin).
 
 **The free SCUM map editor and mod maker: edit the island in 3D, build bridges and roads, tune and clone vehicles and
 weapons, and export ready-to-play mod paks for single player and dedicated servers, without the Unreal editor.**
@@ -12,13 +16,13 @@ weapons, and export ready-to-play mod paks for single player and dedicated serve
 ![Platform](https://img.shields.io/badge/platform-Windows%20x64-0078D6)
 ![Languages](https://img.shields.io/badge/UI-8%20languages-E87B2F)
 
-[![Watch the video guide: How to Mod SCUM with SCUM Modding Studio](docs/images/video-tutorial.jpg)](https://youtu.be/rMdePE6KNnQ)
+[![Watch the video guide: How to Mod SCUM with SCUM Modding Studio (the original app)](docs/images/video-tutorial.jpg)](https://youtu.be/rMdePE6KNnQ)
 
 **▶ [Watch the 3-minute video guide on YouTube](https://youtu.be/rMdePE6KNnQ)**: first start, map editor, building bridges, weapons, export.
 
 </div>
 
-SCUM Modding Studio is a desktop tool for **SCUM modding** on Windows. It reads SCUM's cooked Unreal Engine 4.27 game
+SCUM Forge is a desktop tool for **SCUM modding** on Windows. It reads SCUM's cooked Unreal Engine 4.27 game
 files directly, shows the map the way the game draws it, and writes your changes into a normal
 `pakchunkNNN-<Name>_P.pak` mod for the client and the dedicated server. Every change is a line in a project journal:
 undo anything, even after a restart, and rebuild the mod after a game update.
@@ -418,3 +422,10 @@ of its owners; all game content belongs to them.
 
 <sub>Keywords: SCUM mod, SCUM modding tool, SCUM map editor, SCUM mod maker, SCUM pak, SCUM server mods, SCUM bridge
 builder, SCUM vehicle editor, SCUM weapon editor, SCUM AES key, Unreal Engine 4.27 pak modding, UE4 cooked asset editor.</sub>
+
+## Credits and origin
+
+SCUM Forge is built on **SCUM Modding Studio** by **ALLAWI and contributors** (https://github.com/ALLAWI32/SCUM-Modding-Studio, MIT licence, copyright (c) 2026 ALLAWI and contributors).
+The original copyright and licence text stay in [LICENSE](LICENSE). Changes of this fork are listed in [CHANGELOG.md](CHANGELOG.md) and in the git history.
+For the original app, its releases and its video guide, please go to the upstream project. Assembly and namespace names (`ScumStudio.*`) are kept on purpose,
+so updates of the upstream can still be merged into this fork. Updates inside the app now look at this fork's releases, not the upstream's.

@@ -41,7 +41,7 @@ public sealed class ReportService
     public const int MaxLength = 1_500;
 
     /// <summary>Where to send problems when the app cannot (no webhook in this build).</summary>
-    public const string IssuesUrl = "https://github.com/ALLAWI32/SCUM-Modding-Studio/issues";
+    public const string IssuesUrl = "https://github.com/Skynet23ru/SCUM-Modding-Studio/issues";
 
     /// <summary>The picture Discord shows next to a report: the app's icon in the public repository.</summary>
     public const string AvatarUrl = "https://raw.githubusercontent.com/ALLAWI32/SCUM-Modding-Studio/main/docs/images/app-icon.png";

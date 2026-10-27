@@ -14,7 +14,7 @@
     <ArtifactsPath Condition="'$(ArtifactsPath)' == ''">$(MSBuildThisFileDirectory)artifacts</ArtifactsPath>
 
     <Company>ScumStudio</Company>
-    <Product>SCUM Modding Studio</Product>
+    <Product>SCUM Forge</Product>
     <Copyright>Copyright (c) 2026 ALLAWI and contributors</Copyright>
     <Version>3.6.0</Version>
     <NeutralLanguage>en</NeutralLanguage>

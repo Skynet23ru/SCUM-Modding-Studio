@@ -3,7 +3,7 @@
 A server mod is a Lua script that runs **inside** the SCUM dedicated server and reacts to the game: a player joins, leaves or
 dies, a timer fires.
 
-It runs through **UE4SS** (github.com/UE4SS-RE/RE-UE4SS), the community's Lua framework for Unreal games. SCUM Modding Studio
+It runs through **UE4SS** (github.com/UE4SS-RE/RE-UE4SS), the community's Lua framework for Unreal games. SCUM Forge
 installs it as files next to `SCUMServer.exe`; it never starts or stops the server. UE4SS puts code into the server process, so use it
 on **your own server**, and start that server with BattlEye off (`-nobattleye`), as a UE4SS server needs.
 

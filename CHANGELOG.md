@@ -5,6 +5,9 @@ project uses [semantic versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Changed
+- **The app is now called SCUM Forge**, a fork of SCUM Modding Studio by ALLAWI (MIT). The name changed in the window, texts of all 10 languages, README and build info; the About page names the origin; `LICENSE` keeps the original copyright. Code namespaces (`ScumStudio.*`) are unchanged so upstream changes can still be merged. The update check, the report link and the project page now point to this fork's repository.
+
 ### Added
 - **The Server page is four tabs: Mods, Lua editor, Loot, Log.** The Lua editor and the loot editor are part of the page now (they were separate
   windows opened by buttons); each is made when its tab is first shown, so the server's class dump is read only then. The long row of buttons is

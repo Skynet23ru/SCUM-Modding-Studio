@@ -681,7 +681,7 @@ public sealed partial class SettingsPageViewModel : PageViewModel, IDisposable
     }
 
     /// <summary>The project's home page (source, releases, issues).</summary>
-    public const string ProjectPage = "https://github.com/ALLAWI32/SCUM-Modding-Studio";
+    public const string ProjectPage = "https://github.com/Skynet23ru/SCUM-Modding-Studio";
 
     /// <summary>Opens <see cref="ProjectPage"/> in the browser.</summary>
     [RelayCommand]

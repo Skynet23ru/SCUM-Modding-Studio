@@ -26,7 +26,7 @@ public sealed record ReleaseInfo(Version Version, string Tag, string Notes, stri
 public static class Updater
 {
     /// <summary>The public repository.</summary>
-    public const string Repository = "ALLAWI32/SCUM-Modding-Studio";
+    public const string Repository = "Skynet23ru/SCUM-Modding-Studio";
 
     /// <summary>GitHub API URL of the latest release.</summary>
     public const string LatestUrl = "https://api.github.com/repos/" + Repository + "/releases/latest";
@@ -360,7 +360,7 @@ public static class Updater
 
         if (!files.Any(f => f.IsApp))
         {
-            throw new InvalidDataException($"The download is not a SCUM Modding Studio release (no {AppExe}).");
+            throw new InvalidDataException($"The download is not a SCUM Forge release (no {AppExe}).");
         }
 
         if (files.DistinctBy(f => f.Target, StringComparer.OrdinalIgnoreCase).Count() != files.Count)
