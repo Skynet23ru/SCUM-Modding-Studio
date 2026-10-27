@@ -5,6 +5,8 @@ project uses [semantic versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [3.7.0] - 2026-10-27
+
 ### Changed
 - **README is in Russian** (`README.md`); the English text moved to `README.en.md`, each links to the other.
 - **The app has an icon** (an anvil): in the exe, the taskbar and the main window.
