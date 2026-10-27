@@ -256,6 +256,27 @@
                 <TextBlock x:Name="ValuesNote" DockPanel.Dock="Top" Text="{Binding ValuesNote}" IsVisible="{Binding HasValuesNote}" Classes="caption wrap"
                            Margin="14,0,14,6" />
 
+                <!-- A weapon copy takes only the magazine copy you pick (it gets a mount type of its own). -->
+                <Border DockPanel.Dock="Top" Margin="12,0,12,6" Padding="10,8" CornerRadius="6" IsVisible="{Binding ShowExclusiveMagazine}"
+                        Background="{DynamicResource Surface2Brush}" BorderThickness="1" BorderBrush="{DynamicResource StrokeSubtleBrush}">
+                  <StackPanel Spacing="6">
+                    <TextBlock Text="{Tr Module.ExclusiveMag.Title}" FontWeight="SemiBold" />
+                    <TextBlock Text="{Tr Module.ExclusiveMag.Note}" Classes="caption wrap" />
+                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+                      <ComboBox Grid.Column="0" ItemsSource="{Binding MagazineChoices}" SelectedItem="{Binding SelectedMagazine}" HorizontalAlignment="Stretch"
+                                ToolTip.Tip="{Tr Module.ExclusiveMag.Pick.Tip}">
+                        <ComboBox.ItemTemplate>
+                          <DataTemplate x:DataType="vm:MagazineChoice">
+                            <TextBlock Text="{Binding Name}" />
+                          </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                      </ComboBox>
+                      <Button Grid.Column="1" Content="{Tr Module.ExclusiveMag.Apply}" Command="{Binding MakeMagazineExclusiveCommand}"
+                              ToolTip.Tip="{Tr Module.ExclusiveMag.Apply.Tip}" />
+                    </Grid>
+                  </StackPanel>
+                </Border>
+
                 <Border DockPanel.Dock="Bottom" Padding="12,8" BorderThickness="0,1,0,0" BorderBrush="{DynamicResource StrokeSubtleBrush}">
                   <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="8">
                     <TextBlock Grid.Column="0" Text="{Binding ValuesSummary}" Classes="caption" VerticalAlignment="Center" TextWrapping="Wrap" />

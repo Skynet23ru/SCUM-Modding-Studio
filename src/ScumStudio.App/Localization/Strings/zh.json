@@ -3832,5 +3832,15 @@
   "Server.Tab.Loot.Tip": "某个地点(地牢)可搜索容器的战利品组和概率,以服务器自带的战利品定制方式写入。",
   "Server.Tab.Log": "日志",
   "Server.Tab.Log.Tip": "UE4SS 日志的末尾:模组输出了什么,以及某个模组为什么没有加载。",
-  "Server.Code.Hint": "在左侧选一个模组来编辑它的脚本,或从列表下方的模板添加一个。"
+  "Server.Code.Hint": "在左侧选一个模组来编辑它的脚本,或从列表下方的模板添加一个。",
+  "Module.ExclusiveMag.Title": "此武器只用我的弹匣",
+  "Module.ExclusiveMag.Note": "武器副本只接受你选择的弹匣副本。该弹匣会获得独立的挂载类型，因此原版弹匣不再适用于这把武器。",
+  "Module.ExclusiveMag.Pick.Tip": "此武器副本将接受的弹匣副本",
+  "Module.ExclusiveMag.Apply": "只用这个弹匣",
+  "Module.ExclusiveMag.Apply.Tip": "为弹匣副本赋予独立的挂载类型，并让此武器的弹匣槽只接受它。历史记录中的一步：Ctrl+Z 可撤销。",
+  "Module.ExclusiveMag.Done": "已限制弹匣",
+  "Module.ExclusiveMag.DoneDetail": "{0} 现在只接受 {1}。",
+  "Module.ExclusiveMag.Failed": "无法限制弹匣",
+  "Module.Part.Ammo": "弹药",
+  "Module.Part.Ammo.Tip": "此弹匣接受的弹药类型。勾选一种类型即可装填，取消勾选则移除。弹药的副本沿用原版弹药的类型。"
 }

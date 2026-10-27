@@ -125,6 +125,9 @@ public sealed record ModulePart(string Label, string PackagePath, string Descrip
     /// <summary>True for a weapon's attachment sockets (<see cref="WeaponMounts"/> rows).</summary>
     public bool IsWeaponMounts { get; init; }
 
+    /// <summary>True for a magazine's ammunition types (<see cref="AmmoTypes"/> rows).</summary>
+    public bool IsAmmoTypes { get; init; }
+
     /// <inheritdoc />
     public override string ToString() => Label;
 }

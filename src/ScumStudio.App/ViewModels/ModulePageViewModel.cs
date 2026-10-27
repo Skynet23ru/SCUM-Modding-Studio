@@ -660,6 +660,7 @@ public abstract partial class ModulePageViewModel : PageViewModel, ISearchablePa
 
     partial void OnSelectedPartChanged(ModulePart? value)
     {
+        RefreshMagazineChoices();
         if (value is not null && _catalog is { } catalog)
         {
             _partTask = LoadValuesAsync(catalog, value);
@@ -688,6 +689,7 @@ public abstract partial class ModulePageViewModel : PageViewModel, ISearchablePa
     private void OnProjectChanged(object? sender, EventArgs e) => _services.Dispatcher.Invoke(() =>
     {
         UpdateEditCounts();
+        RefreshMagazineChoices();
         if (_catalog is not null && ClonesChanged())
         {
             _io.Wait();
@@ -1095,7 +1097,7 @@ public abstract partial class ModulePageViewModel : PageViewModel, ISearchablePa
     /// </summary>
     private IReadOnlyList<Tunable> ReadValues(AssetCatalog catalog, ModulePart part, bool melee)
     {
-        if (part.IsVehicleParts || part.IsWeaponMounts)
+        if (part.IsVehicleParts || part.IsWeaponMounts || part.IsAmmoTypes)
         {
             return ReadSlots(catalog, part);
         }
@@ -1193,7 +1195,7 @@ public abstract partial class ModulePageViewModel : PageViewModel, ISearchablePa
     {
         var tokens = ValueFilter.Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
         var rows = _allRows.Where(r => tokens.All(t => r.Tunable.Path.Contains(t, StringComparison.OrdinalIgnoreCase) || r.Label.Contains(t, StringComparison.OrdinalIgnoreCase) || r.Tunable.Group.Contains(t, StringComparison.OrdinalIgnoreCase)));
-        if (KeyStatsOnly && SelectedPart is not ({ IsVehicleParts: true } or { IsWeaponMounts: true }))
+        if (KeyStatsOnly && SelectedPart is not ({ IsVehicleParts: true } or { IsWeaponMounts: true } or { IsAmmoTypes: true }))
         {
             var key = rows.Where(r => IsKeyStat(r.Tunable)).ToList();
             rows = key.Count > 0 ? key : rows;

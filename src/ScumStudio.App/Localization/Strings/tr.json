@@ -3832,5 +3832,15 @@
   "Server.Tab.Loot.Tip": "Bir yerin (bir zindanın) aranabilir kapları için ganimet grupları ve olasılıklar, sunucunun kendi ganimet özelleştirmesi olarak yazılır.",
   "Server.Tab.Log": "Günlük",
   "Server.Tab.Log.Tip": "UE4SS günlüğünün sonu: modların yazdıkları ve birinin neden yüklenmediği.",
-  "Server.Code.Hint": "Betiğini düzenlemek için soldan bir mod seçin veya listenin altından şablondan bir mod ekleyin."
+  "Server.Code.Hint": "Betiğini düzenlemek için soldan bir mod seçin veya listenin altından şablondan bir mod ekleyin.",
+  "Module.ExclusiveMag.Title": "Bu silahta yalnızca benim şarjörüm",
+  "Module.ExclusiveMag.Note": "Silah kopyası yalnızca seçtiğiniz şarjör kopyasını alır. Şarjör kendi bağlantı türünü alır, bu yüzden orijinal şarjörler bu silaha artık uymaz.",
+  "Module.ExclusiveMag.Pick.Tip": "Bu silah kopyasının alacağı şarjör kopyanız",
+  "Module.ExclusiveMag.Apply": "Yalnızca bu şarjör",
+  "Module.ExclusiveMag.Apply.Tip": "Şarjör kopyasına kendi bağlantı türünü verir ve bu silahın şarjör yuvasının yalnızca onu almasını sağlar. Geçmişte tek adım: Ctrl+Z geri alır.",
+  "Module.ExclusiveMag.Done": "Şarjör sınırlandı",
+  "Module.ExclusiveMag.DoneDetail": "{0} artık yalnızca {1} alıyor.",
+  "Module.ExclusiveMag.Failed": "Şarjör sınırlandırılamadı",
+  "Module.Part.Ammo": "Mühimmat",
+  "Module.Part.Ammo.Tip": "Bu şarjörün hangi mühimmat türlerini aldığı. Bir türü işaretleyerek doldurulmasına izin verin, işareti kaldırarak çıkarın. Bir mühimmatın kopyası orijinalin türünü korur."
 }

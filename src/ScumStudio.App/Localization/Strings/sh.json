@@ -3832,5 +3832,15 @@
   "Server.Tab.Loot.Tip": "Skupine plijena i šanse za spremnike koji se mogu pretražiti na nekom mjestu (u tamnici), upisane kao vlastita prilagodba plijena servera.",
   "Server.Tab.Log": "Dnevnik",
   "Server.Tab.Log.Tip": "Kraj UE4SS dnevnika: što modovi ispisuju i zašto se neki nije učitao.",
-  "Server.Code.Hint": "Odaberite mod slijeva da uredite njegovu skriptu ili dodajte mod iz predloška ispod popisa."
+  "Server.Code.Hint": "Odaberite mod slijeva da uredite njegovu skriptu ili dodajte mod iz predloška ispod popisa.",
+  "Module.ExclusiveMag.Title": "Samo moj okvir na ovom oružju",
+  "Module.ExclusiveMag.Note": "Kopija oružja primat će samo kopiju okvira koju odaberete. Okvir dobiva vlastitu vrstu nosača, pa originalni okviri više ne pašu ovom oružju.",
+  "Module.ExclusiveMag.Pick.Tip": "Vaša kopija okvira koju će primati ova kopija oružja",
+  "Module.ExclusiveMag.Apply": "Samo ovaj okvir",
+  "Module.ExclusiveMag.Apply.Tip": "Daje kopiji okvira vlastitu vrstu nosača i dopušta ležištu okvira ovog oružja samo nju. Jedan korak u povijesti: Ctrl+Z ga poništava.",
+  "Module.ExclusiveMag.Done": "Okvir ograničen",
+  "Module.ExclusiveMag.DoneDetail": "{0} sada prima samo {1}.",
+  "Module.ExclusiveMag.Failed": "Okvir se ne može ograničiti",
+  "Module.Part.Ammo": "Streljivo",
+  "Module.Part.Ammo.Tip": "Koje vrste streljiva ovaj okvir prima. Označite vrstu da se smije puniti, skinite oznaku da je uklonite. Kopija streljiva zadržava vrstu originala."
 }

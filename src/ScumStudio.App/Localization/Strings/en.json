@@ -3832,5 +3832,15 @@
   "Server.Tab.Loot.Tip": "Loot groups and chances for the searchable containers of a place (a dungeon), written as the server's own loot customization.",
   "Server.Tab.Log": "Log",
   "Server.Tab.Log.Tip": "The end of UE4SS's log: what the mods print and why one did not load.",
-  "Server.Code.Hint": "Pick a mod on the left to edit its script, or add one from a template under the list."
+  "Server.Code.Hint": "Pick a mod on the left to edit its script, or add one from a template under the list.",
+  "Module.ExclusiveMag.Title": "Only my magazine on this weapon",
+  "Module.ExclusiveMag.Note": "The weapon copy will take only the magazine copy you pick. The magazine gets a mount type of its own, so the stock magazines no longer fit this weapon.",
+  "Module.ExclusiveMag.Pick.Tip": "Your magazine copy that this weapon copy will take",
+  "Module.ExclusiveMag.Apply": "Only this magazine",
+  "Module.ExclusiveMag.Apply.Tip": "Gives the magazine copy a mount type of its own and lets this weapon's magazine socket take only that one. One step in the history: Ctrl+Z undoes it.",
+  "Module.ExclusiveMag.Done": "Magazine limited",
+  "Module.ExclusiveMag.DoneDetail": "{0} now takes only {1}.",
+  "Module.ExclusiveMag.Failed": "Cannot limit the magazine",
+  "Module.Part.Ammo": "Ammunition",
+  "Module.Part.Ammo.Tip": "Which ammunition types this magazine takes. Tick a type to let it load, untick it to take it away. A copy of an ammunition item keeps the type of the stock one."
 }

@@ -3832,5 +3832,15 @@
   "Server.Tab.Loot.Tip": "Grupos de botín y probabilidades para los contenedores registrables de un lugar (una mazmorra), escritos como la personalización de botín del propio servidor.",
   "Server.Tab.Log": "Registro",
   "Server.Tab.Log.Tip": "El final del registro de UE4SS: lo que imprimen los mods y por qué uno no se cargó.",
-  "Server.Code.Hint": "Elija un mod a la izquierda para editar su script, o añada uno desde una plantilla debajo de la lista."
+  "Server.Code.Hint": "Elija un mod a la izquierda para editar su script, o añada uno desde una plantilla debajo de la lista.",
+  "Module.ExclusiveMag.Title": "Solo mi cargador en esta arma",
+  "Module.ExclusiveMag.Note": "La copia del arma solo aceptará la copia del cargador que elijas. El cargador recibe un tipo de montaje propio, así que los cargadores originales ya no encajan en esta arma.",
+  "Module.ExclusiveMag.Pick.Tip": "Tu copia de cargador que aceptará esta copia del arma",
+  "Module.ExclusiveMag.Apply": "Solo este cargador",
+  "Module.ExclusiveMag.Apply.Tip": "Da a la copia del cargador un tipo de montaje propio y deja que la ranura de cargador de esta arma acepte solo ese. Un paso en el historial: Ctrl+Z lo deshace.",
+  "Module.ExclusiveMag.Done": "Cargador limitado",
+  "Module.ExclusiveMag.DoneDetail": "{0} ahora solo acepta {1}.",
+  "Module.ExclusiveMag.Failed": "No se puede limitar el cargador",
+  "Module.Part.Ammo": "Munición",
+  "Module.Part.Ammo.Tip": "Qué tipos de munición acepta este cargador. Marca un tipo para permitir cargarlo, desmárcalo para quitarlo. La copia de una munición conserva el tipo de la original."
 }

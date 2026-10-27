@@ -3832,5 +3832,15 @@
   "Server.Tab.Loot.Tip": "Beutegruppen und Chancen für die durchsuchbaren Behälter eines Ortes (eines Dungeons), geschrieben als die eigene Beute-Anpassung des Servers.",
   "Server.Tab.Log": "Protokoll",
   "Server.Tab.Log.Tip": "Das Ende des UE4SS-Protokolls: was die Mods ausgeben und warum einer nicht geladen wurde.",
-  "Server.Code.Hint": "Wählen Sie links einen Mod, um sein Skript zu bearbeiten, oder fügen Sie unter der Liste einen aus einer Vorlage hinzu."
+  "Server.Code.Hint": "Wählen Sie links einen Mod, um sein Skript zu bearbeiten, oder fügen Sie unter der Liste einen aus einer Vorlage hinzu.",
+  "Module.ExclusiveMag.Title": "Nur mein Magazin an dieser Waffe",
+  "Module.ExclusiveMag.Note": "Die Waffenkopie nimmt nur die gewählte Magazinkopie auf. Das Magazin erhält einen eigenen Anschlusstyp, daher passen die Standardmagazine nicht mehr in diese Waffe.",
+  "Module.ExclusiveMag.Pick.Tip": "Ihre Magazinkopie, die diese Waffenkopie aufnimmt",
+  "Module.ExclusiveMag.Apply": "Nur dieses Magazin",
+  "Module.ExclusiveMag.Apply.Tip": "Gibt der Magazinkopie einen eigenen Anschlusstyp und lässt den Magazinschacht dieser Waffe nur diesen zu. Ein Schritt im Verlauf: Strg+Z macht ihn rückgängig.",
+  "Module.ExclusiveMag.Done": "Magazin beschränkt",
+  "Module.ExclusiveMag.DoneDetail": "{0} nimmt jetzt nur noch {1} auf.",
+  "Module.ExclusiveMag.Failed": "Das Magazin kann nicht beschränkt werden",
+  "Module.Part.Ammo": "Munition",
+  "Module.Part.Ammo.Tip": "Welche Munitionstypen dieses Magazin aufnimmt. Haken setzen erlaubt einen Typ, entfernen nimmt ihn weg. Eine Kopie einer Munition behält den Typ der Originalmunition."
 }

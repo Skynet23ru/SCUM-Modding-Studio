@@ -5,6 +5,12 @@ project uses [semantic versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [3.8.0] - 2026-10-27
+
+### Added
+- **"Only my magazine on this weapon".** In the Attachments part of a weapon copy, pick a magazine copy of the project and press *Only this magazine*: the magazine gets a mount type of its own (a copy of the stock one) and the weapon copy's magazine socket takes that type only, so the stock magazines no longer fit. One step in the history; Ctrl+Z undoes it.
+- **Ammunition part of a magazine.** Tick or untick the ammunition types (`AmmunitionTags`: Cal762x39mm, Cal545x39mm, 12 Gauge …) a magazine takes. The ammunition items of each type are listed beside it, the project's copies first. A copy of an ammunition item keeps the type of the stock one.
+
 ### Fixed
 - **A magazine or attachment you cloned is listed in the weapon's Attachments part.** The list of what a socket takes only knew the game's items, so a copy of a magazine never showed up next to the stock ones. The project's copies are read too and shown first (they keep the mount type of the item they were copied from, so they fit the same sockets).
 

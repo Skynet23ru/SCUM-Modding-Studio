@@ -117,6 +117,7 @@ public static class ModuleExport
                 case "vehiclepart":
                     return ExportModule.Vehicles;
                 case "weapon":
+                case "mounttype":
                 case "magazine":
                 case "ammo":
                 case "projectile":

@@ -3832,5 +3832,15 @@
   "Server.Tab.Loot.Tip": "Các nhóm chiến lợi phẩm và tỉ lệ cho các vật chứa có thể lục của một nơi (một hầm ngục), ghi dưới dạng tùy chỉnh chiến lợi phẩm của chính máy chủ.",
   "Server.Tab.Log": "Nhật ký",
   "Server.Tab.Log.Tip": "Phần cuối nhật ký UE4SS: các mod in ra gì và vì sao một mod không nạp.",
-  "Server.Code.Hint": "Chọn một mod ở bên trái để sửa script của nó, hoặc thêm mod từ mẫu dưới danh sách."
+  "Server.Code.Hint": "Chọn một mod ở bên trái để sửa script của nó, hoặc thêm mod từ mẫu dưới danh sách.",
+  "Module.ExclusiveMag.Title": "Chỉ băng đạn của tôi cho vũ khí này",
+  "Module.ExclusiveMag.Note": "Bản sao vũ khí chỉ nhận bản sao băng đạn bạn chọn. Băng đạn có loại gắn riêng, nên các băng đạn gốc không còn lắp vừa vũ khí này.",
+  "Module.ExclusiveMag.Pick.Tip": "Bản sao băng đạn của bạn mà bản sao vũ khí này sẽ nhận",
+  "Module.ExclusiveMag.Apply": "Chỉ băng đạn này",
+  "Module.ExclusiveMag.Apply.Tip": "Cấp cho bản sao băng đạn một loại gắn riêng và chỉ cho khe băng đạn của vũ khí này nhận loại đó. Một bước trong lịch sử: Ctrl+Z hoàn tác.",
+  "Module.ExclusiveMag.Done": "Đã giới hạn băng đạn",
+  "Module.ExclusiveMag.DoneDetail": "{0} giờ chỉ nhận {1}.",
+  "Module.ExclusiveMag.Failed": "Không thể giới hạn băng đạn",
+  "Module.Part.Ammo": "Đạn",
+  "Module.Part.Ammo.Tip": "Những loại đạn mà băng đạn này nhận. Đánh dấu một loại để cho phép nạp, bỏ dấu để loại bỏ. Bản sao của đạn giữ loại của đạn gốc."
 }

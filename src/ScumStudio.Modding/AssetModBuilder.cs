@@ -416,12 +416,13 @@ public static partial class AssetModBuilder
                 // Spawn preset slots and weapon sockets are rewritten whole (they add exports, imports and array items).
                 var parts = edits.Where(e => VehicleParts.IsEdit(e.Path)).ToList();
                 var mounts = edits.Where(e => WeaponMounts.IsEdit(e.Path)).ToList();
-                var stored = edits.Where(e => !MaterialParameters.IsKeyed(e.Path) && !VehicleParts.IsEdit(e.Path) && !WeaponMounts.IsEdit(e.Path)
+                var ammo = edits.Where(e => AmmoTypes.IsEdit(e.Path)).ToList();
+                var stored = edits.Where(e => !MaterialParameters.IsKeyed(e.Path) && !VehicleParts.IsEdit(e.Path) && !WeaponMounts.IsEdit(e.Path) && !AmmoTypes.IsEdit(e.Path)
                     && !MaterialTextureStreaming.IsEdit(e.Path)).ToList();
                 var keyed = edits.Where(e => MaterialParameters.IsKeyed(e.Path)).ToList();
                 var streaming = edits.Where(e => MaterialTextureStreaming.IsEdit(e.Path)).ToList();
                 var bytes = PackageWriter.Rebuild(package);
-                foreach (var (some, apply) in new (List<TunableEdit>, Func<CookedPackage, IEnumerable<TunableEdit>, PackageBytes>)[] { (parts, VehicleParts.Apply), (mounts, WeaponMounts.Apply) })
+                foreach (var (some, apply) in new (List<TunableEdit>, Func<CookedPackage, IEnumerable<TunableEdit>, PackageBytes>)[] { (parts, VehicleParts.Apply), (mounts, WeaponMounts.Apply), (ammo, AmmoTypes.Apply) })
                 {
                     if (some.Count > 0)
                     {

@@ -3832,5 +3832,15 @@
   "Server.Tab.Loot.Tip": "Groupes de butin et chances pour les conteneurs fouillables d'un lieu (un donjon), écrits comme la personnalisation du butin du serveur lui-même.",
   "Server.Tab.Log": "Journal",
   "Server.Tab.Log.Tip": "La fin du journal d'UE4SS : ce que les mods impriment et pourquoi l'un d'eux ne s'est pas chargé.",
-  "Server.Code.Hint": "Choisissez un mod à gauche pour modifier son script, ou ajoutez-en un depuis un modèle sous la liste."
+  "Server.Code.Hint": "Choisissez un mod à gauche pour modifier son script, ou ajoutez-en un depuis un modèle sous la liste.",
+  "Module.ExclusiveMag.Title": "Uniquement mon chargeur sur cette arme",
+  "Module.ExclusiveMag.Note": "La copie de l'arme n'acceptera que la copie de chargeur choisie. Le chargeur reçoit un type de montage propre : les chargeurs d'origine ne vont donc plus sur cette arme.",
+  "Module.ExclusiveMag.Pick.Tip": "Votre copie de chargeur que cette copie d'arme acceptera",
+  "Module.ExclusiveMag.Apply": "Uniquement ce chargeur",
+  "Module.ExclusiveMag.Apply.Tip": "Donne à la copie du chargeur un type de montage propre et ne laisse au logement de chargeur de cette arme que celui-là. Une étape dans l'historique : Ctrl+Z l'annule.",
+  "Module.ExclusiveMag.Done": "Chargeur limité",
+  "Module.ExclusiveMag.DoneDetail": "{0} n'accepte plus que {1}.",
+  "Module.ExclusiveMag.Failed": "Impossible de limiter le chargeur",
+  "Module.Part.Ammo": "Munitions",
+  "Module.Part.Ammo.Tip": "Quels types de munitions ce chargeur accepte. Cochez un type pour l'autoriser, décochez-le pour le retirer. La copie d'une munition garde le type de l'originale."
 }

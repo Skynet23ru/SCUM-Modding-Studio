@@ -33,8 +33,9 @@ public static class WeaponMounts
     /// Mount type class path → the attachments/magazines (package paths) that carry it. <paramref name="clones"/> are the
     /// project's own copies (a magazine or attachment cloned from a stock one keeps its mount type, so it fits the same
     /// sockets): they are not in the game files, so <paramref name="read"/> opens them, and they are listed first.
+    /// <paramref name="mountOf"/> gives a clone's mount type when the project changed it (an own mount type), else null.
     /// </summary>
-    public static IReadOnlyDictionary<string, IReadOnlyList<string>> Index(AssetCatalog catalog, IEnumerable<string>? clones = null, Func<string, CookedPackage?>? read = null)
+    public static IReadOnlyDictionary<string, IReadOnlyList<string>> Index(AssetCatalog catalog, IEnumerable<string>? clones = null, Func<string, CookedPackage?>? read = null, Func<string, string?>? mountOf = null)
     {
         ArgumentNullException.ThrowIfNull(catalog);
         var index = new Dictionary<string, List<string>>(StringComparer.OrdinalIgnoreCase);
@@ -49,9 +50,7 @@ public static class WeaponMounts
             try
             {
                 var package = own.Contains(path, StringComparer.OrdinalIgnoreCase) ? read!(path) ?? throw new FileNotFoundException(path) : ModdableAssets.ReadPackage(catalog, path);
-                if (package.Names.Contains("_attachmentSocketMountType") && Cdo(package) is >= 0 and var cdo
-                    && package.ReadProperties(cdo).Find("_attachmentSocketMountType")?.Value is ObjectValue { Index: < 0 } mount
-                    && ImportPath(package, mount.Index) is { } mountPath)
+                if ((mountOf?.Invoke(path) ?? ItemMount(package)?.Mount) is { } mountPath)
                 {
                     (index.TryGetValue(mountPath, out var list) ? list : index[mountPath] = []).Add(path);
                 }
@@ -65,6 +64,27 @@ public static class WeaponMounts
         // The project's copies first, then the game's, each sorted.
         return index.ToDictionary(e => e.Key, e => (IReadOnlyList<string>)e.Value
             .OrderBy(p => own.Contains(p, StringComparer.OrdinalIgnoreCase) ? 0 : 1).ThenBy(p => p, StringComparer.OrdinalIgnoreCase).ToList(), StringComparer.OrdinalIgnoreCase);
+    }
+
+    /// <summary>The property of an attachment or magazine that names its mount type.</summary>
+    public const string ItemMountProperty = "_attachmentSocketMountType";
+
+    /// <summary>
+    /// The mount type an attachment or magazine fits (<c>/Game/…/BP_MountType….BP_MountType…_C</c>) and the key of the export
+    /// that stores it, or null for a package that is not such an item.
+    /// </summary>
+    public static (string Export, string Mount)? ItemMount(CookedPackage package)
+    {
+        ArgumentNullException.ThrowIfNull(package);
+        var cdo = Cdo(package);
+        if (cdo < 0 || !package.Names.Contains(ItemMountProperty)
+            || package.ReadProperties(cdo).Find(ItemMountProperty)?.Value is not ObjectValue { Index: < 0 } mount
+            || ImportPath(package, mount.Index) is not { } path)
+        {
+            return null;
+        }
+
+        return (TunableReader.ExportKeys(package)[cdo], path);
     }
 
     /// <summary>
