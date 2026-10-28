@@ -3,6 +3,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="using:ScumStudio.App.ViewModels"
+        xmlns:s="using:ScumStudio.Core.Settings"
         xmlns:c="using:ScumStudio.App.Controls"
         xmlns:loc="using:ScumStudio.App.Localization"
         xmlns:local="using:ScumStudio.App.Views"
@@ -271,7 +272,18 @@
 
           <!-- Connections. -->
           <ContentControl Grid.Column="3" Content="{Binding GamePill}" />
-          <ContentControl Grid.Column="4" Content="{Binding ServerPill}" />
+          <StackPanel Grid.Column="4" Orientation="Horizontal">
+            <ContentControl Content="{Binding ServerPill}" />
+            <!-- Several servers: the one in use, and a switch to another (every page follows). -->
+            <ComboBox x:Name="ServerSwitcher" ItemsSource="{Binding ServerChoices}" SelectedItem="{Binding ActiveServer}" IsVisible="{Binding HasManyServers}"
+                      MaxWidth="170" MinHeight="22" Padding="6,0" FontSize="11" VerticalAlignment="Center" ToolTip.Tip="{Tr Shell.Server.Switch.Tip}">
+              <ComboBox.ItemTemplate>
+                <DataTemplate x:DataType="s:ServerProfile">
+                  <TextBlock Text="{Binding Name}" TextTrimming="CharacterEllipsis" />
+                </DataTemplate>
+              </ComboBox.ItemTemplate>
+            </ComboBox>
+          </StackPanel>
           <ContentControl Grid.Column="5" Content="{Binding KeyPill}" />
           <StackPanel Grid.Column="6" Orientation="Horizontal">
             <ContentControl x:Name="AiPill" Content="{Binding AiPill}" />

@@ -1,0 +1,81 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:ScumStudio.App.ViewModels"
+             xmlns:c="using:ScumStudio.App.Controls"
+             x:Class="ScumStudio.App.Views.Pages.ConsolePageView"
+             x:DataType="vm:ConsolePageViewModel">
+  <UserControl.Styles>
+    <Style Selector="TextBlock.error"><Setter Property="Foreground" Value="{DynamicResource DangerBrush}" /></Style>
+    <Style Selector="TextBlock.warning"><Setter Property="Foreground" Value="{DynamicResource WarningBrush}" /></Style>
+  </UserControl.Styles>
+  <Grid Margin="24,20,24,24" RowDefinitions="Auto,Auto,*,Auto,Auto" RowSpacing="10">
+    <StackPanel Spacing="4">
+      <TextBlock Text="{Binding Title}" Classes="h1" />
+      <TextBlock Text="{Binding Subtitle}" Classes="muted wrap" />
+    </StackPanel>
+
+    <!-- Which log, the filter, the view's switches -->
+    <Grid Grid.Row="1" ColumnDefinitions="200,*,Auto,Auto,Auto,Auto" ColumnSpacing="8">
+      <ComboBox x:Name="SourcePicker" ItemsSource="{Binding Sources}" SelectedItem="{Binding SelectedSource}" HorizontalAlignment="Stretch"
+                ToolTip.Tip="{Tr Console.Source.Tip}">
+        <ComboBox.ItemTemplate>
+          <DataTemplate x:DataType="vm:ConsoleSource">
+            <TextBlock Text="{Binding Title}" />
+          </DataTemplate>
+        </ComboBox.ItemTemplate>
+      </ComboBox>
+      <Panel Grid.Column="1">
+        <TextBox x:Name="FilterBox" Classes="search" Text="{Binding Filter}" Watermark="{Tr Console.Filter}" ToolTip.Tip="{Tr Console.Filter.Tip}" />
+        <c:GlyphIcon Kind="Icon.Search" IconSize="15" Margin="11,0,0,0" IsHitTestVisible="False"
+                     HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="{DynamicResource TextMutedBrush}" />
+      </Panel>
+      <ToggleButton x:Name="PauseButton" Grid.Column="2" IsChecked="{Binding IsPaused}" Content="{Tr Console.Pause}" ToolTip.Tip="{Tr Console.Pause.Tip}" />
+      <ToggleButton x:Name="FollowButton" Grid.Column="3" IsChecked="{Binding Follow}" Content="{Tr Console.Follow}" ToolTip.Tip="{Tr Console.Follow.Tip}" />
+      <Button x:Name="CopyButton" Grid.Column="4" Click="OnCopyClick" Content="{Tr Console.Copy}" ToolTip.Tip="{Tr Console.Copy.Tip}" />
+      <Button x:Name="ClearButton" Grid.Column="5" Command="{Binding ClearCommand}" Content="{Tr Console.Clear}" ToolTip.Tip="{Tr Console.Clear.Tip}" />
+    </Grid>
+
+    <!-- The log -->
+    <Border Grid.Row="2" BorderThickness="1" BorderBrush="{DynamicResource StrokeSubtleBrush}" CornerRadius="6" Background="{DynamicResource SurfaceBrush}">
+      <ListBox x:Name="LogList" ItemsSource="{Binding Lines}" SelectionMode="Multiple" ToolTip.Tip="{Tr Console.Log.Tip}"
+               FontFamily="Cascadia Mono,Consolas,Menlo,monospace" FontSize="12" Background="Transparent">
+        <ListBox.ItemTemplate>
+          <DataTemplate x:DataType="vm:ConsoleLine">
+            <TextBlock Text="{Binding Text}" TextWrapping="NoWrap" Classes.error="{Binding IsError}" Classes.warning="{Binding IsWarning}" />
+          </DataTemplate>
+        </ListBox.ItemTemplate>
+      </ListBox>
+    </Border>
+    <TextBlock Grid.Row="3" Text="{Binding Summary}" Classes="caption" />
+
+    <!-- Send -->
+    <Border Grid.Row="4" Padding="10" CornerRadius="6" BorderThickness="1" BorderBrush="{DynamicResource StrokeSubtleBrush}" Background="{DynamicResource Surface2Brush}">
+      <StackPanel Spacing="8">
+        <Grid IsVisible="{Binding ShowBridgeNote}" ColumnDefinitions="*,Auto" ColumnSpacing="8">
+          <TextBlock Text="{Tr Console.Bridge.Note}" Classes="caption wrap" VerticalAlignment="Center" />
+          <Button x:Name="InstallBridgeButton" Grid.Column="1" Command="{Binding InstallBridgeCommand}" IsEnabled="{Binding HasServer}" Content="{Tr Console.Bridge.Install}"
+                  ToolTip.Tip="{Tr Console.Bridge.Install.Tip}" />
+        </Grid>
+        <Grid ColumnDefinitions="190,200,*,Auto" ColumnSpacing="8" IsEnabled="{Binding CanSend}">
+          <ComboBox x:Name="ModePicker" SelectedIndex="{Binding Mode}" HorizontalAlignment="Stretch" ToolTip.Tip="{Tr Console.Mode.Tip}">
+            <ComboBoxItem Content="{Tr Console.Mode.Admin}" />
+            <ComboBoxItem Content="{Tr Console.Mode.Message}" />
+            <ComboBoxItem Content="{Tr Console.Mode.All}" />
+            <ComboBoxItem Content="{Tr Console.Mode.Give}" />
+          </ComboBox>
+          <ComboBox x:Name="PlayerPicker" Grid.Column="1" ItemsSource="{Binding Players}" SelectedItem="{Binding SelectedPlayer}" HorizontalAlignment="Stretch"
+                    IsVisible="{Binding NeedsPlayer}" PlaceholderText="{Tr Console.Player.None}" ToolTip.Tip="{Tr Console.Player.Tip}" />
+          <TextBox x:Name="SendBox" Grid.Column="2" Text="{Binding SendText}" Watermark="{Binding TextHint}" ToolTip.Tip="{Tr Console.Text.Tip}" KeyDown="OnSendKeyDown" />
+          <Button x:Name="SendButton" Grid.Column="3" Classes="accent" Command="{Binding SendCommand}" Content="{Tr Console.Send}" ToolTip.Tip="{Tr Console.Send.Tip}" />
+        </Grid>
+        <!-- Give an item: which item and how many (the player is picked above) -->
+        <Grid ColumnDefinitions="*,110" ColumnSpacing="8" IsVisible="{Binding IsGive}" IsEnabled="{Binding CanSend}">
+          <AutoCompleteBox x:Name="GiveItemBox" Text="{Binding GiveItem, Mode=TwoWay}" ItemsSource="{Binding ItemNames}" FilterMode="Contains" MinimumPrefixLength="1"
+                           Watermark="{Tr Console.Give.Item}" ToolTip.Tip="{Tr Console.Give.Item.Tip}" />
+          <TextBox x:Name="GiveCountBox" Grid.Column="1" Text="{Binding GiveCount}" Watermark="{Tr Console.Give.Count}" ToolTip.Tip="{Tr Console.Give.Count.Tip}" />
+        </Grid>
+        <TextBlock Text="{Binding Status}" Classes="caption wrap" />
+      </StackPanel>
+    </Border>
+  </Grid>
+</UserControl>

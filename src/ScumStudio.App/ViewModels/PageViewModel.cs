@@ -43,6 +43,8 @@ public abstract partial class PageViewModel : ViewModelBase
         "items" => "Icon.Basket",
         "assets" => "Icon.Assets",
         "server" => "Icon.Server",
+        "console" => "Icon.Console",
+        "dashboard" => "Icon.Dashboard",
         "projects" => "Icon.Projects",
         "settings" => "Icon.Settings",
         _ => "Icon.Info",

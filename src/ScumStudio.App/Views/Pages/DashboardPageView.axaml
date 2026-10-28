@@ -1,0 +1,242 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:ScumStudio.App.ViewModels"
+             xmlns:c="using:ScumStudio.App.Controls"
+             x:Class="ScumStudio.App.Views.Pages.DashboardPageView"
+             x:DataType="vm:DashboardPageViewModel">
+  <Grid Margin="24,20,24,24" RowDefinitions="Auto,Auto,Auto,*" RowSpacing="12">
+    <StackPanel Spacing="4">
+      <TextBlock Text="{Binding Title}" Classes="h1" />
+      <TextBlock Text="{Binding Subtitle}" Classes="muted wrap" />
+    </StackPanel>
+
+    <!-- State, scope, refresh -->
+    <Grid Grid.Row="1" ColumnDefinitions="*,Auto,Auto,Auto" ColumnSpacing="8">
+      <TextBlock x:Name="RunningLabel" Text="{Binding RunningText}" Classes="caption" VerticalAlignment="Center" />
+      <TextBlock Grid.Column="1" Text="{Binding Updated}" Classes="caption" VerticalAlignment="Center" />
+      <ComboBox x:Name="ScopePicker" Grid.Column="2" SelectedIndex="{Binding Scope}" MinWidth="220" ToolTip.Tip="{Tr Dash.Scope.Tip}">
+        <ComboBoxItem Content="{Tr Dash.Scope.Current}" />
+        <ComboBoxItem Content="{Tr Dash.Scope.All}" />
+      </ComboBox>
+      <Button x:Name="RefreshButton" Grid.Column="3" Command="{Binding RefreshCommand}" Content="{Tr Dash.Refresh}" ToolTip.Tip="{Tr Dash.Refresh.Tip}" />
+    </Grid>
+
+    <!-- The numbers -->
+    <Grid Grid.Row="2" ColumnDefinitions="*,*,*,*,*" ColumnSpacing="10">
+      <Border x:Name="CardOnline" Grid.Column="0" Padding="14,10" CornerRadius="8" BorderThickness="1" BorderBrush="{DynamicResource StrokeSubtleBrush}" Background="{DynamicResource Surface2Brush}" ToolTip.Tip="{Tr Dash.Kpi.Online.Tip}">
+        <StackPanel Spacing="2">
+          <TextBlock Text="{Tr Dash.Kpi.Online}" Classes="caption" />
+          <TextBlock Text="{Binding OnlineText}" FontSize="26" FontWeight="SemiBold" />
+        </StackPanel>
+      </Border>
+      <Border x:Name="CardFps" Grid.Column="1" Padding="14,10" CornerRadius="8" BorderThickness="1" BorderBrush="{DynamicResource StrokeSubtleBrush}" Background="{DynamicResource Surface2Brush}" ToolTip.Tip="{Tr Dash.Kpi.Fps.Tip}">
+        <StackPanel Spacing="2">
+          <TextBlock Text="{Tr Dash.Kpi.Fps}" Classes="caption" />
+          <TextBlock Text="{Binding FpsText}" FontSize="26" FontWeight="SemiBold" />
+        </StackPanel>
+      </Border>
+      <Border x:Name="CardBunkers" Grid.Column="2" Padding="14,10" CornerRadius="8" BorderThickness="1" BorderBrush="{DynamicResource StrokeSubtleBrush}" Background="{DynamicResource Surface2Brush}" ToolTip.Tip="{Tr Dash.Kpi.Bunkers.Tip}">
+        <StackPanel Spacing="2">
+          <TextBlock Text="{Tr Dash.Kpi.Bunkers}" Classes="caption" />
+          <TextBlock Text="{Binding BunkersText}" FontSize="26" FontWeight="SemiBold" />
+        </StackPanel>
+      </Border>
+      <Border x:Name="CardTrades" Grid.Column="3" Padding="14,10" CornerRadius="8" BorderThickness="1" BorderBrush="{DynamicResource StrokeSubtleBrush}" Background="{DynamicResource Surface2Brush}" ToolTip.Tip="{Tr Dash.Kpi.Trades.Tip}">
+        <StackPanel Spacing="2">
+          <TextBlock Text="{Tr Dash.Kpi.Trades}" Classes="caption" />
+          <TextBlock Text="{Binding TradesText}" FontSize="26" FontWeight="SemiBold" />
+        </StackPanel>
+      </Border>
+      <Border x:Name="CardKills" Grid.Column="4" Padding="14,10" CornerRadius="8" BorderThickness="1" BorderBrush="{DynamicResource StrokeSubtleBrush}" Background="{DynamicResource Surface2Brush}" ToolTip.Tip="{Tr Dash.Kpi.Kills.Tip}">
+        <StackPanel Spacing="2">
+          <TextBlock Text="{Tr Dash.Kpi.Kills}" Classes="caption" />
+          <TextBlock Text="{Binding KillsText}" FontSize="26" FontWeight="SemiBold" />
+        </StackPanel>
+      </Border>
+    </Grid>
+
+    <TabControl Grid.Row="3" x:Name="DashTabs" SelectedIndex="{Binding SelectedTab}">
+      <TabItem x:Name="PlayersTab" Header="{Tr Dash.Tab.Players}" ToolTip.Tip="{Tr Dash.Tab.Players.Tip}">
+        <DockPanel>
+          <Grid DockPanel.Dock="Top" ColumnDefinitions="2*,2*,*,*,80" ColumnSpacing="10" Margin="12,6,12,4"><TextBlock Grid.Column="0" Text="{Tr Dash.Col.Player}" Classes="section" /><TextBlock Grid.Column="1" Text="{Tr Dash.Col.Steam}" Classes="section" /><TextBlock Grid.Column="2" Text="{Tr Dash.Col.Since}" Classes="section" /><TextBlock Grid.Column="3" Text="{Tr Dash.Col.Place}" Classes="section" /><TextBlock Grid.Column="4" Text="{Tr Dash.Col.Source}" Classes="section" /></Grid>
+          <ListBox x:Name="PlayersList" ItemsSource="{Binding Players}" ToolTip.Tip="{Tr Dash.Tab.Players.Tip}" Background="Transparent">
+            <ListBox.ItemTemplate>
+              <DataTemplate x:DataType="vm:DashPlayerRow">
+                <Grid ColumnDefinitions="2*,2*,*,*,80" ColumnSpacing="10"><TextBlock Grid.Column="0" Text="{Binding Name}" TextTrimming="CharacterEllipsis" /><TextBlock Grid.Column="1" Text="{Binding SteamId}" TextTrimming="CharacterEllipsis" /><TextBlock Grid.Column="2" Text="{Binding Since}" TextTrimming="CharacterEllipsis" /><TextBlock Grid.Column="3" Text="{Binding Place}" TextTrimming="CharacterEllipsis" /><TextBlock Grid.Column="4" Text="{Binding Source}" TextTrimming="CharacterEllipsis" /></Grid>
+              </DataTemplate>
+            </ListBox.ItemTemplate>
+          </ListBox>
+        </DockPanel>
+      </TabItem>
+      <TabItem x:Name="TradeTab" Header="{Tr Dash.Tab.Trade}" ToolTip.Tip="{Tr Dash.Tab.Trade.Tip}">
+        <Grid RowDefinitions="*,Auto" RowSpacing="8">
+        <DockPanel>
+          <Grid DockPanel.Dock="Top" ColumnDefinitions="110,*,80,2*,90,*" ColumnSpacing="10" Margin="12,6,12,4"><TextBlock Grid.Column="0" Text="{Tr Dash.Col.Time}" Classes="section" /><TextBlock Grid.Column="1" Text="{Tr Dash.Col.Player}" Classes="section" /><TextBlock Grid.Column="2" Text="{Tr Dash.Col.Deal}" Classes="section" /><TextBlock Grid.Column="3" Text="{Tr Dash.Col.Item}" Classes="section" /><TextBlock Grid.Column="4" Text="{Tr Dash.Col.Price}" Classes="section" /><TextBlock Grid.Column="5" Text="{Tr Dash.Col.Trader}" Classes="section" /></Grid>
+          <ListBox x:Name="TradesList" ItemsSource="{Binding Trades}" ToolTip.Tip="{Tr Dash.Tab.Trade.Tip}" Background="Transparent">
+            <ListBox.ItemTemplate>
+              <DataTemplate x:DataType="vm:DashTradeRow">
+                <Grid ColumnDefinitions="110,*,80,2*,90,*" ColumnSpacing="10"><TextBlock Grid.Column="0" Text="{Binding Time}" TextTrimming="CharacterEllipsis" /><TextBlock Grid.Column="1" Text="{Binding Player}" TextTrimming="CharacterEllipsis" /><TextBlock Grid.Column="2" Text="{Binding Deal}" TextTrimming="CharacterEllipsis" /><TextBlock Grid.Column="3" Text="{Binding Item}" TextTrimming="CharacterEllipsis" /><TextBlock Grid.Column="4" Text="{Binding Price}" TextTrimming="CharacterEllipsis" /><TextBlock Grid.Column="5" Text="{Binding Trader}" TextTrimming="CharacterEllipsis" /></Grid>
+              </DataTemplate>
+            </ListBox.ItemTemplate>
+          </ListBox>
+        </DockPanel>
+          <Border Grid.Row="1" Padding="10" CornerRadius="6" BorderThickness="1" BorderBrush="{DynamicResource StrokeSubtleBrush}" MaxHeight="150">
+            <ScrollViewer>
+              <StackPanel Spacing="2">
+                <TextBlock Text="{Tr Dash.TradeSummary}" Classes="section" />
+                <ItemsControl x:Name="TradeSummaryList" ItemsSource="{Binding TradeSummary}" ToolTip.Tip="{Tr Dash.TradeSummary.Tip}">
+                  <ItemsControl.ItemTemplate>
+                    <DataTemplate x:DataType="x:String">
+                      <TextBlock Text="{Binding}" Classes="caption" />
+                    </DataTemplate>
+                  </ItemsControl.ItemTemplate>
+                </ItemsControl>
+              </StackPanel>
+            </ScrollViewer>
+          </Border>
+        </Grid>
+      </TabItem>
+      <TabItem x:Name="BunkersTab" Header="{Tr Dash.Tab.Bunkers}" ToolTip.Tip="{Tr Dash.Tab.Bunkers.Tip}">
+        <DockPanel>
+          <Grid DockPanel.Dock="Top" ColumnDefinitions="80,110,2*,*" ColumnSpacing="10" Margin="12,6,12,4"><TextBlock Grid.Column="0" Text="{Tr Dash.Col.Bunker}" Classes="section" /><TextBlock Grid.Column="1" Text="{Tr Dash.Col.State}" Classes="section" /><TextBlock Grid.Column="2" Text="{Tr Dash.Col.Detail}" Classes="section" /><TextBlock Grid.Column="3" Text="{Tr Dash.Col.Place}" Classes="section" /></Grid>
+          <ListBox x:Name="BunkersList" ItemsSource="{Binding Bunkers}" ToolTip.Tip="{Tr Dash.Tab.Bunkers.Tip}" Background="Transparent">
+            <ListBox.ItemTemplate>
+              <DataTemplate x:DataType="vm:DashBunkerRow">
+                <Grid ColumnDefinitions="80,110,2*,*" ColumnSpacing="10"><TextBlock Grid.Column="0" Text="{Binding Name}" TextTrimming="CharacterEllipsis" /><TextBlock Grid.Column="1" Text="{Binding State}" TextTrimming="CharacterEllipsis" /><TextBlock Grid.Column="2" Text="{Binding Detail}" TextTrimming="CharacterEllipsis" /><TextBlock Grid.Column="3" Text="{Binding Place}" TextTrimming="CharacterEllipsis" /></Grid>
+              </DataTemplate>
+            </ListBox.ItemTemplate>
+          </ListBox>
+        </DockPanel>
+      </TabItem>
+      <TabItem x:Name="VehiclesTab" Header="{Tr Dash.Tab.Vehicles}" ToolTip.Tip="{Tr Dash.Tab.Vehicles.Tip}">
+        <DockPanel>
+          <Grid DockPanel.Dock="Top" ColumnDefinitions="*,Auto" ColumnSpacing="10" Margin="0,8,0,4">
+            <Panel>
+              <TextBox x:Name="VehicleFilterBox" Classes="search" Text="{Binding VehicleFilter}" Watermark="{Tr Dash.Vehicles.Filter}" ToolTip.Tip="{Tr Dash.Vehicles.Filter.Tip}" />
+              <c:GlyphIcon Kind="Icon.Search" IconSize="15" Margin="11,0,0,0" IsHitTestVisible="False"
+                           HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="{DynamicResource TextMutedBrush}" />
+            </Panel>
+            <TextBlock Grid.Column="1" Text="{Binding VehiclesSummary}" Classes="caption" VerticalAlignment="Center" />
+          </Grid>
+          <Grid DockPanel.Dock="Top" ColumnDefinitions="70,110,*,130,*,*,70,110,100,60" ColumnSpacing="10" Margin="12,6,12,4">
+            <TextBlock Grid.Column="0" Text="{Tr Dash.Col.VehicleId}" Classes="section" />
+            <TextBlock Grid.Column="1" Text="{Tr Dash.Col.Type}" Classes="section" />
+            <TextBlock Grid.Column="2" Text="{Tr Dash.Col.Owner}" Classes="section" />
+            <TextBlock Grid.Column="3" Text="{Tr Dash.Col.Steam}" Classes="section" />
+            <TextBlock Grid.Column="4" Text="{Tr Dash.Col.Lock}" Classes="section" />
+            <TextBlock Grid.Column="5" Text="{Tr Dash.Col.LastUser}" Classes="section" />
+            <TextBlock Grid.Column="6" Text="{Tr Dash.Col.Sector}" Classes="section" />
+            <TextBlock Grid.Column="7" Text="{Tr Dash.Col.Place}" Classes="section" />
+            <TextBlock Grid.Column="8" Text="{Tr Dash.Col.LastUsed}" Classes="section" />
+            <TextBlock Grid.Column="9" Text="{Tr Dash.Col.Works}" Classes="section" />
+          </Grid>
+          <ListBox x:Name="VehiclesList" ItemsSource="{Binding Vehicles}" ToolTip.Tip="{Tr Dash.Tab.Vehicles.Tip}" Background="Transparent">
+            <ListBox.ItemTemplate>
+              <DataTemplate x:DataType="vm:DashVehicleRow">
+                <Grid ColumnDefinitions="70,110,*,130,*,*,70,110,100,60" ColumnSpacing="10">
+                  <TextBlock Grid.Column="0" Text="{Binding Id}" TextTrimming="CharacterEllipsis" ToolTip.Tip="{Binding Id}" />
+                  <TextBlock Grid.Column="1" Text="{Binding Type}" TextTrimming="CharacterEllipsis" ToolTip.Tip="{Binding Type}" />
+                  <TextBlock Grid.Column="2" Text="{Binding Owner}" TextTrimming="CharacterEllipsis" ToolTip.Tip="{Binding Owner}" />
+                  <TextBlock Grid.Column="3" Text="{Binding SteamId}" TextTrimming="CharacterEllipsis" ToolTip.Tip="{Binding SteamId}" />
+                  <TextBlock Grid.Column="4" Text="{Binding Lock}" TextTrimming="CharacterEllipsis" ToolTip.Tip="{Binding Lock}" />
+                  <TextBlock Grid.Column="5" Text="{Binding LastUser}" TextTrimming="CharacterEllipsis" ToolTip.Tip="{Binding LastUser}" />
+                  <TextBlock Grid.Column="6" Text="{Binding Sector}" TextTrimming="CharacterEllipsis" ToolTip.Tip="{Binding Sector}" />
+                  <TextBlock Grid.Column="7" Text="{Binding Place}" TextTrimming="CharacterEllipsis" ToolTip.Tip="{Binding Place}" />
+                  <TextBlock Grid.Column="8" Text="{Binding LastUsed}" TextTrimming="CharacterEllipsis" ToolTip.Tip="{Binding LastUsed}" />
+                  <TextBlock Grid.Column="9" Text="{Binding Works}" TextTrimming="CharacterEllipsis" ToolTip.Tip="{Binding Works}" />
+                </Grid>
+              </DataTemplate>
+            </ListBox.ItemTemplate>
+          </ListBox>
+        </DockPanel>
+      </TabItem>
+      <TabItem x:Name="KillsTab" Header="{Tr Dash.Tab.Kills}" ToolTip.Tip="{Tr Dash.Tab.Kills.Tip}">
+        <DockPanel>
+          <Grid DockPanel.Dock="Top" ColumnDefinitions="110,*,*,*,80" ColumnSpacing="10" Margin="12,6,12,4"><TextBlock Grid.Column="0" Text="{Tr Dash.Col.Time}" Classes="section" /><TextBlock Grid.Column="1" Text="{Tr Dash.Col.Killer}" Classes="section" /><TextBlock Grid.Column="2" Text="{Tr Dash.Col.Victim}" Classes="section" /><TextBlock Grid.Column="3" Text="{Tr Dash.Col.Weapon}" Classes="section" /><TextBlock Grid.Column="4" Text="{Tr Dash.Col.Distance}" Classes="section" /></Grid>
+          <ListBox x:Name="KillsList" ItemsSource="{Binding Kills}" ToolTip.Tip="{Tr Dash.Tab.Kills.Tip}" Background="Transparent">
+            <ListBox.ItemTemplate>
+              <DataTemplate x:DataType="vm:DashKillRow">
+                <Grid ColumnDefinitions="110,*,*,*,80" ColumnSpacing="10"><TextBlock Grid.Column="0" Text="{Binding Time}" TextTrimming="CharacterEllipsis" /><TextBlock Grid.Column="1" Text="{Binding Killer}" TextTrimming="CharacterEllipsis" /><TextBlock Grid.Column="2" Text="{Binding Victim}" TextTrimming="CharacterEllipsis" /><TextBlock Grid.Column="3" Text="{Binding Weapon}" TextTrimming="CharacterEllipsis" /><TextBlock Grid.Column="4" Text="{Binding Distance}" TextTrimming="CharacterEllipsis" /></Grid>
+              </DataTemplate>
+            </ListBox.ItemTemplate>
+          </ListBox>
+        </DockPanel>
+      </TabItem>
+      <TabItem x:Name="ChatTab" Header="{Tr Dash.Tab.Chat}" ToolTip.Tip="{Tr Dash.Tab.Chat.Tip}">
+        <Grid RowDefinitions="*,*" RowSpacing="8">
+        <DockPanel>
+          <Grid DockPanel.Dock="Top" ColumnDefinitions="110,*,80,3*" ColumnSpacing="10" Margin="12,6,12,4"><TextBlock Grid.Column="0" Text="{Tr Dash.Col.Time}" Classes="section" /><TextBlock Grid.Column="1" Text="{Tr Dash.Col.Player}" Classes="section" /><TextBlock Grid.Column="2" Text="{Tr Dash.Col.Channel}" Classes="section" /><TextBlock Grid.Column="3" Text="{Tr Dash.Col.Text}" Classes="section" /></Grid>
+          <ListBox x:Name="ChatList" ItemsSource="{Binding Chat}" ToolTip.Tip="{Tr Dash.Tab.Chat.Tip}" Background="Transparent">
+            <ListBox.ItemTemplate>
+              <DataTemplate x:DataType="vm:DashChatRow">
+                <Grid ColumnDefinitions="110,*,80,3*" ColumnSpacing="10"><TextBlock Grid.Column="0" Text="{Binding Time}" TextTrimming="CharacterEllipsis" /><TextBlock Grid.Column="1" Text="{Binding Player}" TextTrimming="CharacterEllipsis" /><TextBlock Grid.Column="2" Text="{Binding Channel}" TextTrimming="CharacterEllipsis" /><TextBlock Grid.Column="3" Text="{Binding Text}" TextTrimming="CharacterEllipsis" /></Grid>
+              </DataTemplate>
+            </ListBox.ItemTemplate>
+          </ListBox>
+        </DockPanel>
+          <Border Grid.Row="1" BorderThickness="0,1,0,0" BorderBrush="{DynamicResource StrokeSubtleBrush}">
+        <DockPanel>
+          <Grid DockPanel.Dock="Top" ColumnDefinitions="110,*,4*" ColumnSpacing="10" Margin="12,6,12,4"><TextBlock Grid.Column="0" Text="{Tr Dash.Col.Time}" Classes="section" /><TextBlock Grid.Column="1" Text="{Tr Dash.Col.Player}" Classes="section" /><TextBlock Grid.Column="2" Text="{Tr Dash.Col.Command}" Classes="section" /></Grid>
+          <ListBox x:Name="AdminList" ItemsSource="{Binding Admin}" ToolTip.Tip="{Tr Dash.Tab.Admin.Tip}" Background="Transparent">
+            <ListBox.ItemTemplate>
+              <DataTemplate x:DataType="vm:DashChatRow">
+                <Grid ColumnDefinitions="110,*,4*" ColumnSpacing="10"><TextBlock Grid.Column="0" Text="{Binding Time}" TextTrimming="CharacterEllipsis" /><TextBlock Grid.Column="1" Text="{Binding Player}" TextTrimming="CharacterEllipsis" /><TextBlock Grid.Column="2" Text="{Binding Text}" TextTrimming="CharacterEllipsis" /></Grid>
+              </DataTemplate>
+            </ListBox.ItemTemplate>
+          </ListBox>
+        </DockPanel>
+          </Border>
+        </Grid>
+      </TabItem>
+      <TabItem x:Name="ActivityTab" Header="{Tr Dash.Tab.Activity}" ToolTip.Tip="{Tr Dash.Tab.Activity.Tip}">
+        <DockPanel>
+          <Panel DockPanel.Dock="Top" Margin="0,8,0,4">
+            <TextBox x:Name="ActivityFilterBox" Classes="search" Text="{Binding ActivityFilter}" Watermark="{Tr Dash.Activity.Filter}" ToolTip.Tip="{Tr Dash.Activity.Filter.Tip}" />
+            <c:GlyphIcon Kind="Icon.Search" IconSize="15" Margin="11,0,0,0" IsHitTestVisible="False"
+                         HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="{DynamicResource TextMutedBrush}" />
+          </Panel>
+          <Grid DockPanel.Dock="Top" ColumnDefinitions="110,120,110,2*,95,2*,1.5*,1.5*,100" ColumnSpacing="10" Margin="12,6,12,4">
+            <TextBlock Grid.Column="0" Text="{Tr Dash.Col.Time}" Classes="section" />
+            <TextBlock Grid.Column="1" Text="{Tr Dash.Col.Player}" Classes="section" />
+            <TextBlock Grid.Column="2" Text="{Tr Dash.Col.Action}" Classes="section" />
+            <TextBlock Grid.Column="3" Text="{Tr Dash.Col.Item}" Classes="section" />
+            <TextBlock Grid.Column="4" Text="{Tr Dash.Col.ItemId}" Classes="section" />
+            <TextBlock Grid.Column="5" Text="{Tr Dash.Col.Stats}" Classes="section" />
+            <TextBlock Grid.Column="6" Text="{Tr Dash.Col.To}" Classes="section" />
+            <TextBlock Grid.Column="7" Text="{Tr Dash.Col.From}" Classes="section" />
+            <TextBlock Grid.Column="8" Text="{Tr Dash.Col.Place}" Classes="section" />
+          </Grid>
+          <ListBox x:Name="ActivityList" ItemsSource="{Binding Activity}" ToolTip.Tip="{Tr Dash.Activity.Row.Tip}" Background="Transparent" SelectionChanged="OnActivityPicked">
+            <ListBox.ItemTemplate>
+              <DataTemplate x:DataType="vm:DashActivityRow">
+                <Grid ColumnDefinitions="110,120,110,2*,95,2*,1.5*,1.5*,100" ColumnSpacing="10">
+                  <TextBlock Grid.Column="0" Text="{Binding Time}" TextTrimming="CharacterEllipsis" ToolTip.Tip="{Binding Time}" />
+                  <TextBlock Grid.Column="1" Text="{Binding Player}" TextTrimming="CharacterEllipsis" ToolTip.Tip="{Binding Player}" />
+                  <TextBlock Grid.Column="2" Text="{Binding Action}" TextTrimming="CharacterEllipsis" ToolTip.Tip="{Binding Action}" />
+                  <TextBlock Grid.Column="3" Text="{Binding Item}" TextTrimming="CharacterEllipsis" ToolTip.Tip="{Binding Item}" />
+                  <TextBlock Grid.Column="4" Text="{Binding ItemId}" TextTrimming="CharacterEllipsis" ToolTip.Tip="{Binding ItemId}" />
+                  <TextBlock Grid.Column="5" Text="{Binding Stats}" TextTrimming="CharacterEllipsis" ToolTip.Tip="{Binding Stats}" />
+                  <TextBlock Grid.Column="6" Text="{Binding To}" TextTrimming="CharacterEllipsis" ToolTip.Tip="{Binding To}" />
+                  <TextBlock Grid.Column="7" Text="{Binding From}" TextTrimming="CharacterEllipsis" ToolTip.Tip="{Binding From}" />
+                  <TextBlock Grid.Column="8" Text="{Binding Place}" TextTrimming="CharacterEllipsis" ToolTip.Tip="{Binding Place}" />
+                </Grid>
+              </DataTemplate>
+            </ListBox.ItemTemplate>
+          </ListBox>
+        </DockPanel>
+      </TabItem>
+      <TabItem x:Name="EventsTab" Header="{Tr Dash.Tab.Events}" ToolTip.Tip="{Tr Dash.Tab.Events.Tip}">
+        <DockPanel>
+          <Grid DockPanel.Dock="Top" ColumnDefinitions="110,110,4*" ColumnSpacing="10" Margin="12,6,12,4"><TextBlock Grid.Column="0" Text="{Tr Dash.Col.Time}" Classes="section" /><TextBlock Grid.Column="1" Text="{Tr Dash.Col.Kind}" Classes="section" /><TextBlock Grid.Column="2" Text="{Tr Dash.Col.Text}" Classes="section" /></Grid>
+          <ListBox x:Name="EventsList" ItemsSource="{Binding Events}" ToolTip.Tip="{Tr Dash.Tab.Events.Tip}" Background="Transparent">
+            <ListBox.ItemTemplate>
+              <DataTemplate x:DataType="vm:DashEventRow">
+                <Grid ColumnDefinitions="110,110,4*" ColumnSpacing="10"><TextBlock Grid.Column="0" Text="{Binding Time}" TextTrimming="CharacterEllipsis" /><TextBlock Grid.Column="1" Text="{Binding Kind}" TextTrimming="CharacterEllipsis" /><TextBlock Grid.Column="2" Text="{Binding Text}" TextTrimming="CharacterEllipsis" /></Grid>
+              </DataTemplate>
+            </ListBox.ItemTemplate>
+          </ListBox>
+        </DockPanel>
+      </TabItem>
+    </TabControl>
+  </Grid>
+</UserControl>

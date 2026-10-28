@@ -1,0 +1,68 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:ScumStudio.App.ViewModels"
+        xmlns:c="using:ScumStudio.App.Controls"
+        x:Class="ScumStudio.App.Views.ActivityCardWindow"
+        x:DataType="vm:ActivityCardViewModel"
+        Title="{Binding Title}" Width="1180" Height="720" MinWidth="820" MinHeight="520"
+        Background="{DynamicResource Bg0Brush}">
+  <Grid Margin="20" ColumnDefinitions="380,*" ColumnSpacing="16">
+    <!-- Every detail of the action -->
+    <ScrollViewer HorizontalScrollBarVisibility="Disabled">
+      <StackPanel Spacing="10">
+        <TextBlock Text="{Binding Title}" Classes="h2" TextWrapping="Wrap" />
+        <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto" RowSpacing="6" ColumnSpacing="12">
+          <TextBlock Grid.Row="0" Text="{Tr Dash.Col.Time}" Classes="caption" />
+          <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Row.Time}" TextWrapping="Wrap" />
+          <TextBlock Grid.Row="1" Text="{Tr Dash.Col.Player}" Classes="caption" />
+          <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Row.Player}" TextWrapping="Wrap" />
+          <TextBlock Grid.Row="2" Text="{Tr Dash.Col.Action}" Classes="caption" />
+          <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding Row.Action}" TextWrapping="Wrap" />
+          <TextBlock Grid.Row="3" Text="{Tr Dash.Col.Item}" Classes="caption" />
+          <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding Row.Item}" TextWrapping="Wrap" />
+          <TextBlock Grid.Row="4" Text="{Tr Dash.Col.ItemId}" Classes="caption" />
+          <TextBlock Grid.Row="4" Grid.Column="1" Text="{Binding Row.ItemId}" TextWrapping="Wrap" />
+          <TextBlock Grid.Row="5" Text="{Tr Dash.Col.Stats}" Classes="caption" />
+          <TextBlock Grid.Row="5" Grid.Column="1" Text="{Binding Row.Stats}" TextWrapping="Wrap" />
+          <TextBlock Grid.Row="6" Text="{Tr Dash.Col.From}" Classes="caption" />
+          <TextBlock Grid.Row="6" Grid.Column="1" Text="{Binding Row.From}" TextWrapping="Wrap" />
+          <TextBlock Grid.Row="7" Text="{Tr Dash.Col.To}" Classes="caption" />
+          <TextBlock Grid.Row="7" Grid.Column="1" Text="{Binding Row.To}" TextWrapping="Wrap" />
+          <TextBlock Grid.Row="8" Text="{Tr Dash.Col.Place}" Classes="caption" />
+          <TextBlock Grid.Row="8" Grid.Column="1" Text="{Binding Coordinates}" FontFamily="{DynamicResource MonoFontFamily}" />
+        </Grid>
+        <Button x:Name="CopyCoordsButton" Click="OnCopyCoords" Content="{Tr Card.Copy}" ToolTip.Tip="{Tr Card.Copy.Tip}" HorizontalAlignment="Left" />
+
+        <TextBlock Text="{Tr Card.History}" Classes="section" Margin="0,8,0,0" IsVisible="{Binding HasHistory}" />
+        <ListBox x:Name="HistoryList" ItemsSource="{Binding History}" IsVisible="{Binding HasHistory}" MaxHeight="190" ToolTip.Tip="{Tr Card.History.Tip}" Background="Transparent">
+          <ListBox.ItemTemplate>
+            <DataTemplate x:DataType="vm:CardHistoryRow">
+              <StackPanel Spacing="1">
+                <TextBlock Text="{Binding Time}" Classes="caption" />
+                <TextBlock Text="{Binding Player}" TextTrimming="CharacterEllipsis" />
+                <TextBlock Text="{Binding Action}" TextTrimming="CharacterEllipsis" />
+                <TextBlock Text="{Binding Route}" Classes="caption" TextWrapping="Wrap" />
+              </StackPanel>
+            </DataTemplate>
+          </ListBox.ItemTemplate>
+        </ListBox>
+
+        <TextBlock Text="{Tr Card.Raw}" Classes="section" Margin="0,8,0,0" />
+        <TextBox x:Name="RawBox" Text="{Binding Row.Detail, Mode=OneWay}" IsReadOnly="True" TextWrapping="Wrap" AcceptsReturn="True" MinHeight="70" MaxHeight="160"
+                 FontFamily="{DynamicResource MonoFontFamily}" FontSize="11" ToolTip.Tip="{Tr Card.Raw.Tip}" />
+      </StackPanel>
+    </ScrollViewer>
+
+    <!-- The map: the island with the point -->
+    <Border Grid.Column="1" BorderThickness="1" BorderBrush="{DynamicResource StrokeSubtleBrush}" CornerRadius="6" ClipToBounds="True">
+      <Panel>
+        <c:SpawnMap x:Name="CardMap" Picture="{Binding Picture}" Markers="{Binding Markers}" ShownLayers="All" Tool="Pan" ToolTip.Tip="{Tr Card.Map.Tip}" />
+        <StackPanel HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10" Spacing="6" Orientation="Horizontal">
+          <Button x:Name="CenterButton" Classes="ghost" Click="OnCenterClick" Content="{Tr Card.Center}" ToolTip.Tip="{Tr Card.Center.Tip}" />
+        </StackPanel>
+        <TextBlock Text="{Binding PictureText}" Classes="caption" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="10" IsHitTestVisible="False" />
+        <TextBlock Text="{Tr Card.Legend}" Classes="caption" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="10" IsHitTestVisible="False" />
+      </Panel>
+    </Border>
+  </Grid>
+</Window>

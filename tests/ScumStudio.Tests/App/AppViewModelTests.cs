@@ -203,7 +203,7 @@ public sealed class AppViewModelTests
         using var ctx = AppTestContext.Create();
         using var vm = new MainWindowViewModel(ctx.Services);
 
-        Assert.Equal(["Home", "Map", "Spawns", "Vehicles", "Weapons", "Items", "Craftables", "Economy", "Server", "Assets", "Projects", "Settings"], vm.NavItems.Select(n => n.Title));
+        Assert.Equal(["Home", "Map", "Spawns", "Vehicles", "Weapons", "Items", "Craftables", "Economy", "Dashboard", "Server", "Console", "Assets", "Projects", "Settings"], vm.NavItems.Select(n => n.Title));
         Assert.Equal(MainWindowViewModel.PageKeys, vm.NavItems.Select(n => n.Key));
         Assert.Equal("home", vm.CurrentPage?.Key); // the app starts on Home
         Assert.Equal(PillState.Off, vm.GamePill.State);

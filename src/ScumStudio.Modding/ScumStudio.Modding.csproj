@@ -11,6 +11,8 @@
     <PackageReference Include="CUE4Parse" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
     <PackageReference Include="MoonSharp" />
+    <PackageReference Include="SSH.NET" />
+    <PackageReference Include="FluentFTP" />
   </ItemGroup>
 
   <ItemGroup>

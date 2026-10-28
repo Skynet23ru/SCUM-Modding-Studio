@@ -175,6 +175,58 @@
         </StackPanel>
       </Border>
 
+      <!-- The servers the app knows -->
+      <Border Classes="card">
+        <StackPanel Spacing="10">
+          <TextBlock Text="{Tr Settings.Servers}" Classes="h3" />
+          <TextBlock Text="{Tr Settings.Servers.Note}" Classes="caption wrap" />
+          <ListBox x:Name="ServersList" ItemsSource="{Binding Servers}" SelectedItem="{Binding PickedServer}" MaxHeight="180" ToolTip.Tip="{Tr Settings.Servers.List.Tip}">
+            <ListBox.ItemTemplate>
+              <DataTemplate x:DataType="vm:ServerRow">
+                <StackPanel Spacing="1">
+                  <TextBlock Text="{Binding Title}" FontWeight="SemiBold" />
+                  <TextBlock Text="{Binding Folder}" Classes="caption" TextTrimming="CharacterEllipsis" />
+                </StackPanel>
+              </DataTemplate>
+            </ListBox.ItemTemplate>
+          </ListBox>
+          <Grid ColumnDefinitions="*,Auto,Auto,Auto" ColumnSpacing="8">
+            <TextBox x:Name="ServerNameBox" Text="{Binding ServerName}" IsEnabled="{Binding HasPickedServer}" Watermark="{Tr Settings.Servers.Name}" ToolTip.Tip="{Tr Settings.Servers.Name.Tip}" />
+            <Button x:Name="RenameServerButton" Grid.Column="1" Command="{Binding RenameServerCommand}" IsEnabled="{Binding HasPickedServer}" Content="{Tr Settings.Servers.Rename}" ToolTip.Tip="{Tr Settings.Servers.Rename.Tip}" />
+            <Button x:Name="UseServerButton" Grid.Column="2" Classes="accent" Command="{Binding UseServerCommand}" IsEnabled="{Binding HasPickedServer}" Content="{Tr Settings.Servers.Use}" ToolTip.Tip="{Tr Settings.Servers.Use.Tip}" />
+            <Button x:Name="RemoveServerButton" Grid.Column="3" Command="{Binding RemoveServerCommand}" IsEnabled="{Binding HasPickedServer}" Content="{Tr Settings.Servers.Remove}" ToolTip.Tip="{Tr Settings.Servers.Remove.Tip}" />
+          </Grid>
+          <Button x:Name="AddServerButton" Command="{Binding AddServerFromBoxCommand}" Content="{Tr Settings.Servers.Add}" ToolTip.Tip="{Tr Settings.Servers.Add.Tip}" HorizontalAlignment="Left" />
+          <TextBlock x:Name="MirrorStatusText" Text="{Binding MirrorStatus}" Classes="caption wrap" IsVisible="{Binding MirrorStatus, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+          <Expander x:Name="SftpExpander" Header="{Tr Settings.Sftp}" ToolTip.Tip="{Tr Settings.Sftp.Tip}">
+            <StackPanel Spacing="8" Margin="0,8,0,0">
+              <TextBlock Text="{Tr Settings.Sftp.Note}" Classes="caption wrap" />
+              <Grid ColumnDefinitions="*,*" ColumnSpacing="8">
+                <TextBox x:Name="SftpNameBox" Text="{Binding SftpName}" Watermark="{Tr Settings.Servers.Name}" ToolTip.Tip="{Tr Settings.Servers.Name.Tip}" />
+                <TextBox x:Name="SftpRootBox" Grid.Column="1" Text="{Binding SftpRoot}" Watermark="{Tr Settings.Sftp.Root}" ToolTip.Tip="{Tr Settings.Sftp.Root.Tip}" />
+              </Grid>
+              <ComboBox x:Name="SftpProtocolBox" ItemsSource="{Binding SftpProtocols}" SelectedIndex="{Binding SftpProtocolIndex}" ToolTip.Tip="{Tr Settings.Sftp.Protocol.Tip}" />
+              <TextBlock x:Name="SftpPlainWarning" Text="{Tr Settings.Sftp.PlainWarning}" Classes="caption wrap" IsVisible="{Binding SftpIsPlainFtp}" />
+              <Grid ColumnDefinitions="*,90" ColumnSpacing="8">
+                <TextBox x:Name="SftpHostBox" Text="{Binding SftpHost}" Watermark="{Tr Settings.Sftp.Host}" ToolTip.Tip="{Tr Settings.Sftp.Host.Tip}" />
+                <TextBox x:Name="SftpPortBox" Grid.Column="1" Text="{Binding SftpPort}" Watermark="22" ToolTip.Tip="{Tr Settings.Sftp.Port.Tip}" />
+              </Grid>
+              <Grid ColumnDefinitions="*,*" ColumnSpacing="8">
+                <TextBox x:Name="SftpUserBox" Text="{Binding SftpUser}" Watermark="{Tr Settings.Sftp.User}" ToolTip.Tip="{Tr Settings.Sftp.User.Tip}" />
+                <TextBox x:Name="SftpPasswordBox" Grid.Column="1" Text="{Binding SftpPassword}" PasswordChar="●" Watermark="{Tr Settings.Sftp.Password}" ToolTip.Tip="{Tr Settings.Sftp.Password.Tip}" />
+              </Grid>
+              <TextBox x:Name="SftpKeyBox" Text="{Binding SftpKeyFile}" Watermark="{Tr Settings.Sftp.KeyFile}" ToolTip.Tip="{Tr Settings.Sftp.KeyFile.Tip}" />
+              <CheckBox x:Name="SftpWriteBox" IsChecked="{Binding SftpAllowWrite}" Content="{Tr Settings.Sftp.Write}" ToolTip.Tip="{Tr Settings.Sftp.Write.Tip}" />
+              <StackPanel Orientation="Horizontal" Spacing="8">
+                <Button x:Name="SftpCheckButton" Command="{Binding CheckSftpCommand}" IsEnabled="{Binding !SftpBusy}" Content="{Tr Settings.Sftp.Check}" ToolTip.Tip="{Tr Settings.Sftp.Check.Tip}" />
+                <Button x:Name="SftpAddButton" Classes="accent" Command="{Binding AddSftpServerCommand}" IsEnabled="{Binding !SftpBusy}" Content="{Tr Settings.Sftp.Add}" ToolTip.Tip="{Tr Settings.Sftp.Add.Tip}" />
+              </StackPanel>
+              <TextBlock x:Name="SftpStatusText" Text="{Binding SftpStatus}" Classes="caption wrap" />
+            </StackPanel>
+          </Expander>
+        </StackPanel>
+      </Border>
+
       <!-- Key -->
       <Border Classes="card">
         <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12">

@@ -10,6 +10,8 @@ into this repository.
 | [UAssetAPI](https://github.com/atenfyr/UAssetAPI) 1.1.0 | reading/writing cooked `.uasset`/`.umap` packages | MIT |
 | [Avalonia](https://github.com/AvaloniaUI/Avalonia) 11.3.22 (+ Desktop, Themes.Fluent, Controls.ColorPicker, Fonts.Inter, Diagnostics, Headless) | cross-platform desktop UI | MIT |
 | [MoonSharp](https://github.com/moonsharp-devs/moonsharp) 2.0.0 | syntax check of the Lua server mods in the Lua editor (parsing only, nothing is run) | BSD-3-Clause |
+| [SSH.NET](https://github.com/sshnet/SSH.NET) 2025.0.0 | SFTP connection to remote servers (files are mirrored on this PC) | MIT |
+| [FluentFTP](https://github.com/robinrodricks/FluentFTP) 53.0.2 | FTP/FTPS connection to game hosts that give no SSH | MIT |
 | [CommunityToolkit.Mvvm](https://github.com/CommunityToolkit/dotnet) 8.3.2 | MVVM helpers | MIT |
 | [Silk.NET](https://github.com/dotnet/Silk.NET) 2.23.0 (OpenGL, Core, Maths, Windowing) | OpenGL bindings and offscreen window contexts | MIT |
 | [System.CommandLine](https://github.com/dotnet/command-line-api) 2.0.0-beta4 | command-line parsing | MIT |

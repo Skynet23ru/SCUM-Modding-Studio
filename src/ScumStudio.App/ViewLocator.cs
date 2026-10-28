@@ -24,6 +24,8 @@ public sealed class ViewLocator : IDataTemplate
         [typeof(CraftablesPageViewModel)] = () => new CraftablesPageView(),
         [typeof(AssetsPageViewModel)] = () => new AssetsPageView(),
         [typeof(ServerPageViewModel)] = () => new ServerPageView(),
+        [typeof(ConsolePageViewModel)] = () => new ConsolePageView(),
+        [typeof(DashboardPageViewModel)] = () => new DashboardPageView(),
         [typeof(ProjectsPageViewModel)] = () => new ProjectsPageView(),
         [typeof(SettingsPageViewModel)] = () => new SettingsPageView(),
         [typeof(SharePageViewModel)] = () => new SharePageView(),

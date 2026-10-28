@@ -77,6 +77,7 @@ public sealed class AppServices : IDisposable
         Reports = new ReportService(LoggerFactory.CreateLogger<ReportService>());
         Prefabs = new PrefabLibrary(Path.Combine(DataDirectory, "Prefabs"));
         Economy = new ProjectEconomy(this);
+        Mirror = new MirrorService(this);
     }
 
     /// <summary>Raised (on the calling thread) after settings were saved through <see cref="UpdateSettings"/>.</summary>
@@ -145,6 +146,9 @@ public sealed class AppServices : IDisposable
     /// <summary>Saved selections (plain JSON files under the data folder, independent of any project).</summary>
     public PrefabLibrary Prefabs { get; }
 
+    /// <summary>Keeps the files of the active remote (SFTP) server mirrored on this PC.</summary>
+    public MirrorService Mirror { get; }
+
     /// <summary>The open project's economy (<c>EconomyOverride.json</c>), kept in step with the traders on the map.</summary>
     public ProjectEconomy Economy { get; }
 
@@ -157,10 +161,42 @@ public sealed class AppServices : IDisposable
     /// <summary>Loads, changes and saves the settings, then raises <see cref="SettingsChanged"/>.</summary>
     public AppSettings UpdateSettings(Func<AppSettings, AppSettings> change)
     {
-        var updated = Settings.Update(change);
+        var updated = Settings.Update(s => ServerProfiles.Normalize(change(s)));
         SettingsChanged?.Invoke(this, EventArgs.Empty);
         return updated;
     }
+
+    /// <summary>Makes the server <paramref name="id"/> the one in use; every page follows.</summary>
+    public void SelectServer(string id) => UpdateSettings(s => ServerProfiles.Activate(s, id));
+
+    /// <summary>Adds a server by its folder (a local folder or a network share) and makes it the one in use.</summary>
+    /// <exception cref="ArgumentException">The folder is empty.</exception>
+    public void AddServer(string folder, string? name = null) => UpdateSettings(s => ServerProfiles.Add(s, folder, name));
+
+    /// <summary>Renames a server.</summary>
+    public void RenameServer(string id, string name) => UpdateSettings(s => ServerProfiles.Rename(s, id, name));
+
+    /// <summary>Takes a server off the list (its files are not touched).</summary>
+    public void RemoveServer(string id)
+    {
+        var mirrored = Settings.Load().Servers.FirstOrDefault(s => s.Id == id)?.IsSftp == true;
+        UpdateSettings(s => ServerProfiles.Remove(s, id));
+        if (mirrored)
+        {
+            // The copy of a remote server's files lives only in the app's data folder; it goes with the server.
+            try
+            {
+                Directory.Delete(ServerProfiles.MirrorRoot(id, DataDirectory), true);
+            }
+            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+            {
+                Logger.LogInformation("The mirror of the removed server stays: {Message}", ex.Message);
+            }
+        }
+    }
+
+    /// <summary>Adds a server reached over SFTP (the host key must have been confirmed by a check) and makes it the one in use.</summary>
+    public void AddSftpServer(string name, SftpAccess access) => UpdateSettings(s => ServerProfiles.AddSftp(s, name, access, true, DataDirectory));
 
     /// <summary>Validates and stores the AES key. Returns false (nothing stored) when the text is not a 256-bit hex key.</summary>
     public bool TryStoreKey(string? text)
@@ -192,6 +228,7 @@ public sealed class AppServices : IDisposable
         Economy.Dispose();
         Thumbnails.Dispose();
         Mcp.Dispose();
+        Mirror.Dispose();
         Workspace.Dispose();
         LoggerFactory.Dispose();
     }

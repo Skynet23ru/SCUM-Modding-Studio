@@ -50,6 +50,19 @@ public sealed partial class AccentChoiceViewModel : ViewModelBase
 }
 
 /// <summary>Settings page: language, accent colour, folders, AES key, AI control (MCP server) and data locations.</summary>
+/// <summary>A server of the list on the Settings page.</summary>
+/// <param name="Id">Its key.</param>
+/// <param name="Name">The name.</param>
+/// <param name="Folder">Its folder.</param>
+/// <param name="IsNetwork">It is on a network share.</param>
+/// <param name="Active">It is the one in use.</param>
+/// <param name="IsSftp">It is reached over SFTP (its files are mirrored on this PC).</param>
+public sealed record ServerRow(string Id, string Name, string Folder, bool IsNetwork, bool Active, bool IsSftp = false)
+{
+    /// <summary>The list line: the name, and what kind it is.</summary>
+    public string Title => Name + (Active ? "  ·  " + Loc.T("Settings.Servers.Active") : string.Empty) + (IsNetwork ? "  ·  " + Loc.T("Settings.Servers.Network") : string.Empty) + (IsSftp ? "  ·  " + Loc.T("Settings.Servers.Remote") : string.Empty);
+}
+
 public sealed partial class SettingsPageViewModel : PageViewModel, IDisposable
 {
     private readonly AppServices _services;
@@ -67,6 +80,7 @@ public sealed partial class SettingsPageViewModel : PageViewModel, IDisposable
         _services.KeyChanged += OnKeyChanged;
         _services.SettingsChanged += OnSettingsChanged;
         _services.Mcp.StateChanged += OnMcpStateChanged;
+        _services.Mirror.Changed += OnMirrorChanged;
         Reload();
         StartGraphics();
     }
@@ -186,10 +200,85 @@ public sealed partial class SettingsPageViewModel : PageViewModel, IDisposable
     /// <summary>Full build version including the source revision.</summary>
     public string BuildVersion => CoreInfo.Version;
 
+    /// <summary>The servers the app knows (the server in use is marked).</summary>
+    public System.Collections.ObjectModel.ObservableCollection<ServerRow> Servers { get; } = [];
+
+    /// <summary>The server picked in the list.</summary>
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(HasPickedServer))]
+    private ServerRow? _pickedServer;
+
+    /// <summary>The name typed for the picked server.</summary>
+    [ObservableProperty]
+    private string _serverName = string.Empty;
+
+    /// <summary>A server is picked in the list.</summary>
+    public bool HasPickedServer => PickedServer is not null;
+
+    partial void OnPickedServerChanged(ServerRow? value) => ServerName = value?.Name ?? string.Empty;
+
+    private void LoadServers(AppSettings s)
+    {
+        var keep = PickedServer?.Id;
+        Servers.Clear();
+        foreach (var p in s.Servers)
+        {
+            Servers.Add(new ServerRow(p.Id, p.Name, p.Folder, p.IsNetwork, p.Id == s.ActiveServerId, p.IsSftp));
+        }
+
+        PickedServer = Servers.FirstOrDefault(r => r.Id == keep) ?? Servers.FirstOrDefault(r => r.Active);
+    }
+
+    /// <summary>Makes the picked server the one in use: every page follows.</summary>
+    [RelayCommand]
+    private void UseServer()
+    {
+        if (PickedServer is { } row)
+        {
+            _services.SelectServer(row.Id);
+        }
+    }
+
+    /// <summary>Adds the folder of the box above as a server (a local folder or a network share) and uses it.</summary>
+    [RelayCommand]
+    private void AddServerFromBox()
+    {
+        var folder = ServerPaksFolder.Trim().Trim('"');
+        if (folder.Length == 0)
+        {
+            _services.Notifications.Warning(Loc.T("Settings.Servers.NoFolder"), Loc.T("Settings.Servers.NoFolderDetail"));
+            return;
+        }
+
+        _services.AddServer(GameLocator.ResolvePaksFolder(folder) ?? folder);
+        _services.Notifications.Success(Loc.T("Settings.Servers.Added"), folder);
+    }
+
+    /// <summary>Renames the picked server.</summary>
+    [RelayCommand]
+    private void RenameServer()
+    {
+        if (PickedServer is { } row && ServerName.Trim().Length > 0)
+        {
+            _services.RenameServer(row.Id, ServerName);
+        }
+    }
+
+    /// <summary>Takes the picked server off the list (its files are not touched).</summary>
+    [RelayCommand]
+    private void RemoveServer()
+    {
+        if (PickedServer is { } row)
+        {
+            _services.RemoveServer(row.Id);
+        }
+    }
+
     /// <summary>Re-reads settings and key status.</summary>
     public void Reload()
     {
         var s = _services.Settings.Load();
+        LoadServers(s);
         GamePaksFolder = s.GamePaksFolder ?? string.Empty;
         ServerPaksFolder = s.ServerPaksFolder ?? string.Empty;
         ClientModsFolder = s.ClientModsOutputFolder ?? string.Empty;
@@ -468,6 +557,7 @@ public sealed partial class SettingsPageViewModel : PageViewModel, IDisposable
         _services.KeyChanged -= OnKeyChanged;
         _services.SettingsChanged -= OnSettingsChanged;
         _services.Mcp.StateChanged -= OnMcpStateChanged;
+        _services.Mirror.Changed -= OnMirrorChanged;
         StopGraphics();
         _toolbar?.Dispose();
     }
@@ -475,6 +565,8 @@ public sealed partial class SettingsPageViewModel : PageViewModel, IDisposable
     private void OnKeyChanged(object? sender, EventArgs e) => _services.Dispatcher.Invoke(Reload);
 
     private void OnSettingsChanged(object? sender, EventArgs e) => _services.Dispatcher.Invoke(Reload);
+
+    private void OnMirrorChanged(object? sender, EventArgs e) => _services.Dispatcher.Invoke(() => OnPropertyChanged(nameof(MirrorStatus)));
 
     private void OnMcpStateChanged(object? sender, EventArgs e) => _services.Dispatcher.Invoke(RefreshMcp);
 

@@ -33,6 +33,12 @@ public sealed record AppSettings
     /// <summary>Dedicated server Paks folder (<c>...\SCUM\Content\Paks</c> next to SCUMServer.exe); null = not configured.</summary>
     public string? ServerPaksFolder { get; init; }
 
+    /// <summary>The servers the app knows (see <see cref="ServerProfiles"/>); <see cref="ServerPaksFolder"/> is the active one's folder.</summary>
+    public IReadOnlyList<ServerProfile> Servers { get; init; } = [];
+
+    /// <summary>The id of the server in use (one of <see cref="Servers"/>), or null.</summary>
+    public string? ActiveServerId { get; init; }
+
     /// <summary>Folder that receives built client mod paks (e.g. the launcher's mods folder); null = ask.</summary>
     public string? ClientModsOutputFolder { get; init; }
 

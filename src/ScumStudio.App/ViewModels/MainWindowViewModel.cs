@@ -6,7 +6,9 @@ using Microsoft.Extensions.Logging;
 using ScumStudio.App.Localization;
 using ScumStudio.App.Services;
 using ScumStudio.Core;
+using ScumStudio.Core.Settings;
 using ScumStudio.Core.Games;
+using ScumStudio.Modding.ServerMods;
 
 namespace ScumStudio.App.ViewModels;
 
@@ -17,7 +19,7 @@ namespace ScumStudio.App.ViewModels;
 public sealed partial class MainWindowViewModel : ViewModelBase, IDisposable
 {
     /// <summary>Navigation keys in rail order.</summary>
-    public static IReadOnlyList<string> PageKeys { get; } = ["home", "map", "spawns", "vehicles", "weapons", "items", "craftables", "economy", "server", "assets", "projects", "settings"];
+    public static IReadOnlyList<string> PageKeys { get; } = ["home", "map", "spawns", "vehicles", "weapons", "items", "craftables", "economy", "dashboard", "server", "console", "assets", "projects", "settings"];
 
     private readonly List<IDisposable> _disposables = [];
 
@@ -35,7 +37,9 @@ public sealed partial class MainWindowViewModel : ViewModelBase, IDisposable
             new NavItemViewModel("items", "Items", "Icon.Basket", null, () => Track(new ItemsPageViewModel(services, OpenSetup))),
             new NavItemViewModel("craftables", "Craftables", "Icon.Cube3d", null, () => Track(new CraftablesPageViewModel(services, OpenSetup))),
             new NavItemViewModel("economy", "Economy", "Icon.Coins", null, () => Track(CreateEconomy(services))),
-            new NavItemViewModel("server", "Server", "Icon.Server", null, () => Track(new ServerPageViewModel(services)), groupKey: "server"),
+            new NavItemViewModel("dashboard", "Dashboard", "Icon.Dashboard", null, () => Track(new DashboardPageViewModel(services)), groupKey: "server"),
+            new NavItemViewModel("server", "Server", "Icon.Server", null, () => Track(new ServerPageViewModel(services))),
+            new NavItemViewModel("console", "Console", "Icon.Console", null, () => Track(new ConsolePageViewModel(services))),
             new NavItemViewModel("assets", "Assets", "Icon.Assets", null, () => Track(new AssetsPageViewModel(services, OpenSetup, PlaceInMap, MakeCraftable)), groupKey: "tools"),
             new NavItemViewModel("projects", "Projects", "Icon.Projects", null, () => Track(new ProjectsPageViewModel(services))),
             new NavItemViewModel("settings", "Settings", "Icon.Settings", null, () => Track(new SettingsPageViewModel(services, OpenSetup))),
@@ -49,6 +53,8 @@ public sealed partial class MainWindowViewModel : ViewModelBase, IDisposable
         services.Notifications.Toasts.CollectionChanged += OnToastsChanged;
         Loc.Instance.LanguageChanged += OnLanguageChanged;
         RefreshPills();
+        RefreshServers();
+        EnsureServerMods();
 
         var last = services.UiState.Current.LastPage;
         SelectedNavItem = NavItems.FirstOrDefault(n => n.Key == last) ?? NavItems[0];
@@ -498,7 +504,81 @@ public sealed partial class MainWindowViewModel : ViewModelBase, IDisposable
         }
     }
 
-    private void OnSettingsOrKeyChanged(object? sender, EventArgs e) => Services.Dispatcher.Invoke(RefreshPills);
+    private void OnSettingsOrKeyChanged(object? sender, EventArgs e)
+    {
+        Services.Dispatcher.Invoke(RefreshPills);
+        Services.Dispatcher.Invoke(RefreshServers);
+        EnsureServerMods();
+    }
+
+    /// <summary>The servers of the switcher in the status bar (shown when the app knows more than one).</summary>
+    public ObservableCollection<ServerProfile> ServerChoices { get; } = [];
+
+    /// <summary>The server in use, as the switcher shows it; picking another one switches every page to it.</summary>
+    [ObservableProperty]
+    private ServerProfile? _activeServer;
+
+    /// <summary>The app knows more than one server, so the switcher is shown.</summary>
+    public bool HasManyServers => ServerChoices.Count > 1;
+
+    private bool _refreshingServers;
+
+    partial void OnActiveServerChanged(ServerProfile? value)
+    {
+        if (!_refreshingServers && value is not null && Services.Settings.Load().ActiveServerId != value.Id)
+        {
+            Services.SelectServer(value.Id);
+        }
+    }
+
+    private void RefreshServers()
+    {
+        var settings = Services.Settings.Load();
+        _refreshingServers = true;
+        try
+        {
+            ServerChoices.Clear();
+            foreach (var p in settings.Servers)
+            {
+                ServerChoices.Add(p);
+            }
+
+            ActiveServer = ServerChoices.FirstOrDefault(p => p.Id == settings.ActiveServerId);
+        }
+        finally
+        {
+            _refreshingServers = false;
+        }
+
+        OnPropertyChanged(nameof(HasManyServers));
+    }
+
+    /// <summary>
+    /// The Studio's own server mods (the bridge and the activity logger) go to every server the app is connected to, so the
+    /// Console and the Dashboard have their data wherever the server is (see <see cref="ServerAutoMods"/>).
+    /// </summary>
+    private void EnsureServerMods()
+    {
+        try
+        {
+            var settings = Services.Settings.Load();
+            // A remote server gets the mods only when its owner allowed writing and UE4SS is already there.
+            if (ServerProfiles.Active(settings) is { IsSftp: true } remote && remote.Sftp is not { AllowWrite: true })
+            {
+                return;
+            }
+
+            if (ServerInstall.Find(settings.ServerPaksFolder) is { } server && (ServerProfiles.Active(settings)?.IsSftp != true || server.HasUe4ss) &&
+                ServerAutoMods.Ensure(server) is { Count: > 0 } changed)
+            {
+                Services.Logger.LogInformation("Server mods written: {Mods}", string.Join(", ", changed));
+            }
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        {
+            Services.Logger.LogWarning("Server mods not written: {Message}", ex.Message);
+        }
+    }
 
     private void OnMcpStateChanged(object? sender, EventArgs e) => Services.Dispatcher.Invoke(RefreshAiPill);
 

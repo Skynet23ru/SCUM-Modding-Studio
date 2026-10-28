@@ -37,6 +37,7 @@ public sealed partial class ServerPageViewModel : PageViewModel
         : base("server", "Server", "Lua mods that run inside your dedicated server: announcements, join messages, event logs.")
     {
         _services = services;
+        _services.SettingsChanged += (_, _) => _services.Dispatcher.Invoke(Refresh);
         _selectedTemplate = Templates[0];
         Refresh();
     }
