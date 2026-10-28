@@ -5,6 +5,13 @@ project uses [semantic versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [3.9.0] - 2026-10-28
+
+### Changed
+- The wordmark in the top-left corner now reads SCUM FORGE (it still said MODDING STUDIO).
+- The Support card no longer has the donate block (PayPal and e-mail); the community link and *Report a problem* stay.
+- README (Russian and English) describes the Console, the Dashboard and the several/remote servers, with screenshots.
+
 ### Added
 - **Remote servers over FTP and FTPS (game hosting).** The *Add a remote server* form now has a connection kind: SFTP (SSH), FTPS (FTP over TLS, the certificate's fingerprint is remembered at the first check and verified at every connection) or plain FTP (not encrypted: a warning is shown; for hosts that offer nothing else). The mirror, the read-only default and the *Allow writing* switch work the same as for SFTP; when a host does not allow UE4SS, the logs, the save and the whole Dashboard still work, only the bridge, the activity mod and giving items are missing. New package: FluentFTP (MIT).
 - **Remote servers over SFTP.** Settings, *Servers*, *Add a remote server (SFTP)*: host, port, login, password or key file and the server's folder on the host. *Check connection* shows the host's key and whether the folder is a SCUM server (and whether it has UE4SS and a save); the key is remembered and verified at every connection (a changed key stops the connection). The app keeps a copy of the files it needs on this PC and every page (Server, Console, Dashboard, vehicles) reads it as it reads a local server: new log lines every few seconds, the save (`SCUM.db`), mods and settings once a minute. By default the host is only read; *Allow writing* sends mods and settings changed here to the host and adds the Console's commands to the host's queue (a new `commands.txt` is appended to what the host has not taken yet). The password is stored encrypted for your Windows account; mods are installed on a remote server only when writing is allowed and UE4SS is already there. "Is the server running" comes from how fresh the host's `SCUM.log` is. If the connection drops, the app retries with growing pauses and says so in Settings. Removing the server deletes its copy. New package: SSH.NET (MIT).

@@ -45,19 +45,50 @@ jobs:
         shell: pwsh
         run: scripts/build.ps1 -Configuration Release -Test -Publish -Zip -Version ${{ steps.version.outputs.value }}
 
-      - name: Draft release
+      - name: Keep the zip as an artifact (fallback, see Actions - this run - Artifacts)
+        uses: actions/upload-artifact@v4
+        with:
+          name: SCUM-Forge-${{ steps.version.outputs.value }}-win-x64
+          path: dist/*.zip
+          if-no-files-found: error
+
+      - name: Release
         shell: pwsh
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
+          $ErrorActionPreference = 'Stop'
           $v = "${{ steps.version.outputs.value }}"
+          $tag = "v$v"
           $zip = "dist/SCUM-Modding-Studio-$v-win-x64.zip"
-          # A release made by hand for this tag gets the CI-built zip; otherwise a draft is created.
-          gh release view "v$v" *> $null
-          if ($LASTEXITCODE -eq 0) { gh release upload "v$v" $zip --clobber; exit $LASTEXITCODE }
+          if (-not (Test-Path $zip)) { throw "The release zip is missing: $zip" }
+          Write-Host "Zip: $zip ($([math]::Round((Get-Item $zip).Length / 1MB, 1)) MB)"
+          Write-Host "Releases now:"; gh release list --limit 10
+
           # The whole CHANGELOG is longer than GitHub allows for release notes (125000 characters): only this version's section goes in.
           $text = Get-Content CHANGELOG.md -Raw
           $m = [regex]::Match($text, "(?ms)^## \[$([regex]::Escape($v))\][^\r\n]*\r?\n(.*?)(?=^## \[|\z)")
           $notes = if ($m.Success) { $m.Groups[1].Value.Trim() } else { "See CHANGELOG.md" }
+          # Release notes are written in Russian by hand (docs/releases/<version>.ru.md); the CHANGELOG section is the fallback.
+          $ru = "docs/releases/$v.ru.md"
+          if (Test-Path $ru) { $notes = (Get-Content $ru -Raw -Encoding utf8).Trim() }
           Set-Content -Path release-notes.md -Value $notes -Encoding utf8
-          gh release create "v$v" $zip --draft --title "SCUM Forge $v" --notes-file release-notes.md
+
+          # A release of this tag made by hand (or by anything else) gets the zip; otherwise a draft is created with it.
+          gh release view $tag --json tagName 2>&1 | Out-Host
+          if ($LASTEXITCODE -eq 0) {
+            Write-Host "Release $tag exists: uploading the zip to it."
+            gh release upload $tag $zip --clobber
+            if ($LASTEXITCODE -ne 0) { throw "gh release upload failed ($LASTEXITCODE)" }
+            gh release edit $tag --title "SCUM Forge $v" --notes-file release-notes.md
+          }
+          else {
+            Write-Host "No release $tag yet: creating a draft."
+            gh release create $tag $zip --draft --title "SCUM Forge $v" --notes-file release-notes.md
+            if ($LASTEXITCODE -ne 0) { throw "gh release create failed ($LASTEXITCODE)" }
+          }
+
+          # The step is green only when the zip is really attached.
+          $assets = gh release view $tag --json assets --jq '.assets[].name'
+          Write-Host "Attached: $assets"
+          if (-not ($assets -split "`n" | Where-Object { $_ -eq (Split-Path $zip -Leaf) })) { throw "The zip is not attached to $tag." }

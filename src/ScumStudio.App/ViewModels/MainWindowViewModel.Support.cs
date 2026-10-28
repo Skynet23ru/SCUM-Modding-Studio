@@ -23,9 +23,6 @@ public sealed record ReportCategoryOption(ReportCategory Category, string Key)
 /// </summary>
 public sealed partial class MainWindowViewModel
 {
-    /// <summary>Where support goes.</summary>
-    public const string PayPalUrl = "https://www.paypal.me/ALLAWI34SGWTG121";
-
     /// <summary>The community server (a permanent invite): help, mods, bug reports, releases.</summary>
     public const string DiscordUrl = "https://discord.gg/ympctW5SYG";
 
@@ -94,20 +91,10 @@ public sealed partial class MainWindowViewModel
     private void CloseSupport() => IsSupportOpen = false;
 
     [RelayCommand]
-    private void OpenPayPal() => OpenUrl(PayPalUrl);
-
-    [RelayCommand]
     private void OpenDiscord() => OpenUrl(DiscordUrl);
 
     [RelayCommand]
     private void OpenIssues() => OpenUrl(ReportService.IssuesUrl);
-
-    [RelayCommand]
-    private async Task CopyEmailAsync()
-    {
-        await Services.Dialogs.SetClipboardTextAsync(SupportEmail).ConfigureAwait(true);
-        Services.Notifications.Info(Loc.T("Support.Email.Copied"), SupportEmail);
-    }
 
     private bool CanSendReport() => CanReport && !IsSendingReport && ReportText.Trim().Length >= 10;
 

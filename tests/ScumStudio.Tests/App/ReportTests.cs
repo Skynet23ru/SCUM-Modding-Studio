@@ -99,7 +99,6 @@ public sealed class ReportTests
         var (window, vm) = HeadlessUi.ShowMainWindow(ctx.Services, 1280, 800);
         try
         {
-            Assert.Equal("https://www.paypal.me/ALLAWI34SGWTG121", MainWindowViewModel.PayPalUrl);
             vm.OpenSupportCommand.Execute(null);
             HeadlessUi.Pump();
             Assert.True(vm.IsSupportOpen);
